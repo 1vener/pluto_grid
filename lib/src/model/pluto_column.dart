@@ -331,7 +331,7 @@ class PlutoColumn {
       }
     }
 
-    return value.toString();
+    return value == null ? '' : value.toString();
   }
 }
 
