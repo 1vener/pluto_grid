@@ -27,6 +27,35 @@ class PlutoDefaultCell extends PlutoStatefulWidget {
 
   @override
   State<PlutoDefaultCell> createState() => _PlutoDefaultCellState();
+
+  static String groupCountText(PlutoRowGroupDelegate delegate, PlutoRow row) {
+    final compactCount = delegate.enableCompactCount;
+    final count = compactCount
+        ? delegate.compactNumber(row.type.group.children.length)
+        : row.type.group.children.length.toString();
+    return '($count)';
+  }
+
+  static TextStyle groupCountTextStyle(PlutoGridStyleConfig style) {
+    return style.cellTextStyle.copyWith(
+      decoration: TextDecoration.none,
+      fontWeight: FontWeight.normal,
+    );
+  }
+
+  static bool canExpand(PlutoRowGroupDelegate? delegate, PlutoCell cell) {
+    if(delegate == null) return false;
+    if (!cell.row.type.isGroup || !delegate.enabled) {
+      return false;
+    }
+    return delegate.isExpandableCell(cell);
+  }
+
+
+  static bool showGroupCount(PlutoRowGroupDelegate? delegate, PlutoCell cell) {
+    if(delegate == null) return false;
+    return delegate.enabled && delegate.isExpandableCell(cell) && cell.row.type.isGroup && delegate.showCount;
+  }
 }
 
 class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
