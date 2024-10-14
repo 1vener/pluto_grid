@@ -66,7 +66,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
   @override
   void initState() {
     super.initState();
-    print('init combox');
+
     cellFocus = FocusNode(onKeyEvent: _handleOnKey);
 
     widget.stateManager.setTextEditingController(_textController);
@@ -84,7 +84,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
 
   @override
   void dispose() {
-    print('pluot cob dispose');
+
     /**
      * Saves the changed value when moving a cell while text is being input.
      * if user do not press enter key, onEditingComplete is not called and the value is not saved.
@@ -187,7 +187,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
     _filteredOptionsList = _options.where((String option) {
       return option.toLowerCase().contains(_textController.text.toLowerCase());
     });
-    print('_performSearch');
+
       setState(() {
         // if (!_optionIsSelected && _selectedOption != null) _selectedOption = null;
         _showDropdown = true;
@@ -196,7 +196,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
 
   void _handleOnComplete() {
     final old = _textController.text;
-    print('oncomplete');
+
     _changeValue();
 
     _handleOnChanged(old);
@@ -261,7 +261,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
   }
 
   void _handleDropdownTapOutside() {
-    print('drop tapout');
+
     setState(() {
       _showDropdown = false;
       widget.stateManager.setKeepFocus(false);
@@ -271,7 +271,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
   }
 
   void _handleInputTapOutside() {
-    print('input -tapout');
+
 
     widget.stateManager.setKeepFocus(false);
 
@@ -279,14 +279,9 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
 
 
   void _handleSelect(String option) {
-    _showDropdown = true;
-    setState(() {
 
-      _textController.text = option;
-
-      widget.stateManager.setKeepFocus(false);
-
-    });
+    _textController.text = option;
+    _handleDropdownTapOutside();
   }
 
   void _showAllOptionsList() async {
