@@ -371,17 +371,28 @@ return  DropdownTheme(child: MoonDropdown(
     onTapOutside: (PointerDownEvent _) => _handleInputTapOutside(),
 
     decoration:  InputDecoration(
-      suffixIcon: GestureDetector(
+      suffix: Padding(padding: EdgeInsets.symmetric(horizontal: 4),child: GestureDetector(
         onTap: () => _showAllOptionsList(),
         child: AnimatedRotation(
           duration: const Duration(milliseconds: 200),
           turns: _showDropdown ? -0.5 : 0,
           child: const Icon(
             CupertinoIcons.chevron_down,
-            size: 14,
+            size: 16,
           ),
         ),
-      ),
+      ),),
+      // suffixIcon: GestureDetector(
+      //   onTap: () => _showAllOptionsList(),
+      //   child: AnimatedRotation(
+      //     duration: const Duration(milliseconds: 200),
+      //     turns: _showDropdown ? -0.5 : 0,
+      //     child: const Icon(
+      //       CupertinoIcons.chevron_down,
+      //       size: 14,
+      //     ),
+      //   ),
+      // ),
       border: OutlineInputBorder(
         borderSide: BorderSide.none,
       ),
