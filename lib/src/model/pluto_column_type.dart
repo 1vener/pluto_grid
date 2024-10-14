@@ -154,6 +154,17 @@ abstract class PlutoColumnType {
     );
   }
 
+  factory PlutoColumnType.comboBox(
+  List<dynamic> items,{
+    dynamic defaultValue = '',
+  }) {
+    return PlutoColumnTypeComboBox(
+      defaultValue: defaultValue,
+      items:  items,
+
+    );
+  }
+
   bool isValid(dynamic value);
 
   int compare(dynamic a, dynamic b);
@@ -173,6 +184,8 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
   bool get isDate => this is PlutoColumnTypeDate;
 
   bool get isTime => this is PlutoColumnTypeTime;
+
+  bool get isComboBox => this is PlutoColumnTypeComboBox;
 
   PlutoColumnTypeText get text {
     if (this is! PlutoColumnTypeText) {
@@ -204,6 +217,14 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
     }
 
     return this as PlutoColumnTypeSelect;
+  }
+
+  PlutoColumnTypeComboBox get comboBox {
+    if (this is! PlutoColumnTypeComboBox) {
+      throw TypeError();
+    }
+
+    return this as PlutoColumnTypeComboBox;
   }
 
   PlutoColumnTypeDate get date {
@@ -507,6 +528,34 @@ class PlutoColumnTypeTime
     return v;
   }
 }
+
+class PlutoColumnTypeComboBox implements PlutoColumnType {
+  @override
+  final dynamic defaultValue;
+
+  final List<dynamic> items;
+
+  const PlutoColumnTypeComboBox({
+    this.defaultValue,
+    required this.items,
+  });
+
+  @override
+  bool isValid(dynamic value) {
+    return true;
+  }
+
+  @override
+  int compare(dynamic a, dynamic b) {
+    return _compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
+  }
+
+  @override
+  dynamic makeCompareValue(dynamic v) {
+    return v.toString();
+  }
+}
+
 
 abstract class PlutoColumnTypeHasFormat<T> {
   const PlutoColumnTypeHasFormat({

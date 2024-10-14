@@ -391,6 +391,13 @@ class _CellState extends PlutoStateWithChange<_Cell> {
           column: widget.column,
           row: widget.row,
         );
+      } else if (widget.column.type.isComboBox) {
+        return PlutoComBoBoxCell(
+          stateManager: stateManager,
+          cell: widget.cell,
+          column: widget.column,
+          row: widget.row,
+        );
       }
     }
 
