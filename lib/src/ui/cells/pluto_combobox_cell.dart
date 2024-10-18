@@ -151,19 +151,10 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
   }
 
   void _changeValue() {
-    if (formattedValue == _textController.text) {
+    if(widget.cell.value == _textController.text){
       return;
     }
-    widget.cell.value = _textController.text;
     widget.stateManager.changeCellValue(widget.cell, _textController.text);
-    //
-    // // _textController.text = formattedValue;
-    //
-    // _initialCellValue = _textController.text;
-    //
-    // _textController.selection = TextSelection.fromPosition(
-    //   TextPosition(offset: _textController.text.length),
-    // );
 
     _cellEditingStatus = _CellEditingStatus.updated;
   }

@@ -314,6 +314,9 @@ class PlutoColumn {
 
   String formattedValueForDisplayInEditing(dynamic value) {
     if (type is PlutoColumnTypeWithNumberFormat) {
+      if(value == null){
+        return '';
+      }
       return value.toString().replaceFirst(
             '.',
             (type as PlutoColumnTypeWithNumberFormat)

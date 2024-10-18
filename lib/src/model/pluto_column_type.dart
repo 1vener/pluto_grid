@@ -29,7 +29,7 @@ abstract class PlutoColumnType {
   /// [locale] Specifies the numeric locale of the column.
   /// If not specified, the default locale is used.
   factory PlutoColumnType.number({
-    dynamic defaultValue = 0,
+    dynamic defaultValue = '',
     bool negative = true,
     String format = '#,###',
     bool applyFormatOnInit = true,
@@ -620,19 +620,21 @@ mixin PlutoColumnTypeWithNumberFormat {
   }
 
   dynamic makeCompareValue(dynamic v) {
-    return v.runtimeType != num ? num.tryParse(v.toString()) ?? 0 : v;
+    return v.runtimeType != num ? num.tryParse(v.toString()) : v;
   }
 
   String applyFormat(dynamic value) {
-    num number = num.tryParse(
+    num? number = num.tryParse(
           value.toString().replaceAll(numberFormat.symbols.DECIMAL_SEP, '.'),
         ) ??
-        0;
+        null;
 
-    if (negative == false && number < 0) {
+    if (number != null && negative == false && number < 0) {
       number = 0;
     }
-
+    if(number == null){
+      return '';
+    }
     return numberFormat.format(number);
   }
 
@@ -648,9 +650,9 @@ mixin PlutoColumnTypeWithNumberFormat {
         .replaceAll(RegExp('[^$match]'), '')
         .replaceFirst(numberFormat.symbols.DECIMAL_SEP, '.');
 
-    final num formattedNumber = num.tryParse(formatted) ?? 0;
+    final num? formattedNumber = num.tryParse(formatted);
 
-    return formattedNumber.isFinite ? formattedNumber : 0;
+    return formattedNumber;
   }
 
   bool isNumeric(dynamic s) {

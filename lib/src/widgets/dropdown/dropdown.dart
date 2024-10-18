@@ -363,7 +363,7 @@ class _MoonDropdownState extends State<MoonDropdown> with RouteAware, SingleTick
     if (_overlayEntry != null) _removeDropdown(immediately: true);
 
     widget.routeObserver?.unsubscribe(this);
-    // _animationController?.dispose();
+    _animationController?.dispose();
     super.dispose();
   }
 
