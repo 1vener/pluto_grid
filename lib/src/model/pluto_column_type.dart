@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
 
@@ -155,12 +157,12 @@ abstract class PlutoColumnType {
   }
 
   factory PlutoColumnType.comboBox(
-  List<dynamic> items,{
+  AllOptionsBuilder optionsBuilder,{
     dynamic defaultValue = '',
   }) {
     return PlutoColumnTypeComboBox(
       defaultValue: defaultValue,
-      items:  items,
+      optionsBuilder:  optionsBuilder,
 
     );
   }
@@ -528,16 +530,16 @@ class PlutoColumnTypeTime
     return v;
   }
 }
-
+typedef AllOptionsBuilder = FutureOr<List<dynamic>> Function();
 class PlutoColumnTypeComboBox implements PlutoColumnType {
   @override
   final dynamic defaultValue;
 
-  final List<dynamic> items;
+  final AllOptionsBuilder optionsBuilder;
 
   const PlutoColumnTypeComboBox({
     this.defaultValue,
-    required this.items,
+    required this.optionsBuilder,
   });
 
   @override

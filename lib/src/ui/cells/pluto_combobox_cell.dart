@@ -170,8 +170,8 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
 
   Future<void> _performSearch() async {
     if (_options.isEmpty) {
-      _options = await widget.column.type.comboBox.items
-          .map((e) => e.toString())
+      List<dynamic> list = await widget.column.type.comboBox.optionsBuilder.call();
+      _options = list.map((e) => e.toString())
           .toList();
     }
 
@@ -271,8 +271,8 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
   }
 
   void _showAllOptionsList() async {
-    _options = await widget.column.type.comboBox.items
-        .map((e) => e.toString())
+    List<dynamic> list = await widget.column.type.comboBox.optionsBuilder.call();
+    _options = list.map((e) => e.toString())
         .toList();
     setState(() {
       _filteredOptionsList = _options;
@@ -285,114 +285,121 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
     if (widget.stateManager.keepFocus) {
       cellFocus.requestFocus();
     }
-    return DropdownTheme(
-        child: MoonDropdown(
-          maxHeight: 200,
-          show: _showDropdown,
-          constrainWidthToChild: true,
-          onTapOutside: () => _handleDropdownTapOutside(),
-          contentPadding: EdgeInsets.zero,
-          dropdownAnchorPosition: MoonDropdownAnchorPosition.bottomRight,
-          content: Scrollbar(
-            controller: _scrollController,
-            child: ListView.builder(
-              padding: const EdgeInsets.all(4),
+
+    return LayoutBuilder(builder: (ctx,constraint){
+      return  DropdownTheme(
+          child: MoonDropdown(
+            maxHeight: 200,
+            minHeight: 80,
+            maxWidth: constraint.maxWidth,
+            minWidth: constraint.minWidth,
+            show: _showDropdown,
+            constrainWidthToChild: false,
+            onTapOutside: () => _handleDropdownTapOutside(),
+            contentPadding: EdgeInsets.zero,
+            dropdownAnchorPosition: MoonDropdownAnchorPosition.bottomRight,
+            content: Scrollbar(
               controller: _scrollController,
-              primary: false,
-              itemCount: _filteredOptionsList.length,
-              cacheExtent: 10,
-              itemExtent: 22,
-              itemBuilder: (BuildContext context, int index) {
-                return TextButton(
-                  style: ButtonStyle(
-                      backgroundColor:
-                          WidgetStateProperty.resolveWith((states) {
-                        if (states.contains(WidgetState.hovered)) {
-                          return Theme.of(context).primaryColor;
-                        } else {
-                          return Colors.transparent;
-                        }
-                      }),
-                      maximumSize: WidgetStateProperty.all(Size(100, 22)),
-                      minimumSize: WidgetStateProperty.all(Size(50, 22)),
-                      animationDuration: Duration.zero,
-                      // 设置文字颜色，使用textstyle无效
-                      foregroundColor: WidgetStateProperty.resolveWith(
-                          (Set<WidgetState> states) {
-                        if (states.contains(WidgetState.hovered)) {
-                          return ColorUtils.textLuminance(
-                              Theme.of(context).primaryColor);
-                        } else {
-                          return Theme.of(context).brightness == Brightness.dark
-                              ? MacosColors.labelColor.darkColor
-                              : MacosColors.labelColor.color;
-                        }
-                      }),
-                      shape: WidgetStateProperty.all(RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5)))),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child:
-                        Text(_filteredOptionsList.elementAt(index).toString()),
-                  ),
-                  onPressed: () {
-                    _handleSelect(_filteredOptionsList.elementAt(index));
-                  },
-                );
-              },
+              child: ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(4),
+                controller: _scrollController,
+                primary: false,
+                itemCount: _filteredOptionsList.length,
+                cacheExtent: 10,
+                itemExtent: 22,
+                itemBuilder: (BuildContext context, int index) {
+                  return TextButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                        WidgetStateProperty.resolveWith((states) {
+                          if (states.contains(WidgetState.hovered)) {
+                            return Theme.of(context).primaryColor;
+                          } else {
+                            return Colors.transparent;
+                          }
+                        }),
+                        maximumSize: WidgetStateProperty.all(Size(100, 22)),
+                        minimumSize: WidgetStateProperty.all(Size(50, 22)),
+                        animationDuration: Duration.zero,
+                        // 设置文字颜色，使用textstyle无效
+                        foregroundColor: WidgetStateProperty.resolveWith(
+                                (Set<WidgetState> states) {
+                              if (states.contains(WidgetState.hovered)) {
+                                return ColorUtils.textLuminance(
+                                    Theme.of(context).primaryColor);
+                              } else {
+                                return Theme.of(context).brightness == Brightness.dark
+                                    ? MacosColors.labelColor.darkColor
+                                    : MacosColors.labelColor.color;
+                              }
+                            }),
+                        shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5)))),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child:
+                      Text(_filteredOptionsList.elementAt(index).toString()),
+                    ),
+                    onPressed: () {
+                      _handleSelect(_filteredOptionsList.elementAt(index));
+                    },
+                  );
+                },
+              ),
             ),
-          ),
-          child: TextField(
-            focusNode: cellFocus,
-            controller: _textController,
-            readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
-            onChanged: _handleOnChanged,
-            onEditingComplete: _handleOnComplete,
-            onSubmitted: (_) => _handleOnComplete(),
-            onTap: _handleOnTap,
-            style: widget.stateManager.configuration.style.cellTextStyle,
-            onTapOutside: (PointerDownEvent _) => _handleInputTapOutside(),
-            decoration: InputDecoration(
-              suffix: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 4),
-                child: GestureDetector(
-                  onTap: () => _showAllOptionsList(),
-                  child: AnimatedRotation(
-                    duration: const Duration(milliseconds: 200),
-                    turns: _showDropdown ? -0.5 : 0,
-                    child: const Icon(
-                      CupertinoIcons.chevron_down,
-                      size: 16,
+            child: TextField(
+              focusNode: cellFocus,
+              controller: _textController,
+              readOnly: widget.column.checkReadOnly(widget.row, widget.cell),
+              onChanged: _handleOnChanged,
+              onEditingComplete: _handleOnComplete,
+              onSubmitted: (_) => _handleOnComplete(),
+              onTap: _handleOnTap,
+              style: widget.stateManager.configuration.style.cellTextStyle,
+              onTapOutside: (PointerDownEvent _) => _handleInputTapOutside(),
+              decoration: InputDecoration(
+                suffix: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  child: GestureDetector(
+                    onTap: () => _showAllOptionsList(),
+                    child: AnimatedRotation(
+                      duration: const Duration(milliseconds: 200),
+                      turns: _showDropdown ? -0.5 : 0,
+                      child: const Icon(
+                        CupertinoIcons.chevron_down,
+                        size: 16,
+                      ),
                     ),
                   ),
                 ),
+                // suffixIcon: GestureDetector(
+                //   onTap: () => _showAllOptionsList(),
+                //   child: AnimatedRotation(
+                //     duration: const Duration(milliseconds: 200),
+                //     turns: _showDropdown ? -0.5 : 0,
+                //     child: const Icon(
+                //       CupertinoIcons.chevron_down,
+                //       size: 14,
+                //     ),
+                //   ),
+                // ),
+                border: OutlineInputBorder(
+                  borderSide: BorderSide.none,
+                ),
+                contentPadding: EdgeInsets.zero,
               ),
-              // suffixIcon: GestureDetector(
-              //   onTap: () => _showAllOptionsList(),
-              //   child: AnimatedRotation(
-              //     duration: const Duration(milliseconds: 200),
-              //     turns: _showDropdown ? -0.5 : 0,
-              //     child: const Icon(
-              //       CupertinoIcons.chevron_down,
-              //       size: 14,
-              //     ),
-              //   ),
-              // ),
-              border: OutlineInputBorder(
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: EdgeInsets.zero,
+              maxLines: 1,
+              keyboardType: keyboardType,
+              inputFormatters: inputFormatters,
+              textAlignVertical: TextAlignVertical.center,
+              textAlign: widget.column.textAlign.value,
             ),
-            maxLines: 1,
-            keyboardType: keyboardType,
-            inputFormatters: inputFormatters,
-            textAlignVertical: TextAlignVertical.center,
-            textAlign: widget.column.textAlign.value,
           ),
-        ),
-        data: Theme.of(context).brightness == Brightness.dark
-            ? DropdownThemeData.dark()
-            : DropdownThemeData.light());
+          data: Theme.of(context).brightness == Brightness.dark
+              ? DropdownThemeData.dark()
+              : DropdownThemeData.light());
+    },);
   }
 }
 
