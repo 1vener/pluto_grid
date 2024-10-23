@@ -105,6 +105,8 @@ class PlutoScrollbar extends StatefulWidget {
 
   static const Radius defaultRadiusWhileDragging = Radius.circular(4.0);
 
+  static const double defaultBottomScrollbarPadding = 12;
+
   @override
   PlutoGridCupertinoScrollbarState createState() =>
       PlutoGridCupertinoScrollbarState();

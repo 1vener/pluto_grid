@@ -70,7 +70,6 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
   @override
   Widget build(BuildContext context) {
     final scrollbarConfig = stateManager.configuration.scrollbar;
-
     return PlutoScrollbar(
       verticalController:
           scrollbarConfig.draggableScrollbar ? _verticalScroll : null,
@@ -90,7 +89,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
       radius: scrollbarConfig.scrollbarRadius,
       radiusWhileDragging: scrollbarConfig.scrollbarRadiusWhileDragging,
       longPressDuration: scrollbarConfig.longPressDuration,
-      child: SingleChildScrollView(
+      child: Padding(padding: EdgeInsets.only(bottom: scrollbarConfig.bottomScrollbarPadding),child: SingleChildScrollView(
         controller: _horizontalScroll,
         scrollDirection: Axis.horizontal,
         physics: const ClampingScrollPhysics(),
@@ -115,7 +114,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
             },
           ),
         ),
-      ),
+      ),),
     );
   }
 }

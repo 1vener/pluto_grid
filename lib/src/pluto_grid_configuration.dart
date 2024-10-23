@@ -674,6 +674,7 @@ class PlutoGridScrollbarConfig {
         PlutoScrollbar.defaultRadiusWhileDragging,
     this.longPressDuration,
     this.dragDevices,
+    this.bottomScrollbarPadding = PlutoScrollbar.defaultBottomScrollbarPadding,
   });
 
   final bool draggableScrollbar;
@@ -714,6 +715,8 @@ class PlutoGridScrollbarConfig {
   final Duration? longPressDuration;
 
   final Set<PointerDeviceKind>? dragDevices;
+
+  final double bottomScrollbarPadding;
 
   @override
   bool operator ==(covariant Object other) {
