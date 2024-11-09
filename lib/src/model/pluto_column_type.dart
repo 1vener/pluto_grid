@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
+import 'package:pluto_grid/pluto_grid.dart';
 
 abstract class PlutoColumnType {
   dynamic get defaultValue;
@@ -167,6 +168,17 @@ abstract class PlutoColumnType {
     );
   }
 
+  factory PlutoColumnType.overlay(
+      PlutoOverlayBuilder overlayBuilder,{
+        dynamic defaultValue = '',
+      }) {
+    return PlutoColumnTypeOverLay(
+      defaultValue: defaultValue,
+      overlayBuilder:  overlayBuilder,
+
+    );
+  }
+
   bool isValid(dynamic value);
 
   int compare(dynamic a, dynamic b);
@@ -188,6 +200,9 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
   bool get isTime => this is PlutoColumnTypeTime;
 
   bool get isComboBox => this is PlutoColumnTypeComboBox;
+
+  bool get isOverlay => this is PlutoColumnTypeOverLay;
+
 
   PlutoColumnTypeText get text {
     if (this is! PlutoColumnTypeText) {
@@ -227,6 +242,14 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
     }
 
     return this as PlutoColumnTypeComboBox;
+  }
+
+  PlutoColumnTypeOverLay get overlay {
+    if (this is! PlutoColumnTypeOverLay) {
+      throw TypeError();
+    }
+
+    return this as PlutoColumnTypeOverLay;
   }
 
   PlutoColumnTypeDate get date {
@@ -540,6 +563,38 @@ class PlutoColumnTypeComboBox implements PlutoColumnType {
   const PlutoColumnTypeComboBox({
     this.defaultValue,
     required this.optionsBuilder,
+  });
+
+  @override
+  bool isValid(dynamic value) {
+    return true;
+  }
+
+  @override
+  int compare(dynamic a, dynamic b) {
+    return _compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
+  }
+
+  @override
+  dynamic makeCompareValue(dynamic v) {
+    return v.toString();
+  }
+}
+
+typedef PlutoOverlayBuilder= Widget Function(
+    PlutoRow row,
+    PlutoCell cell,
+    BuildContext context,
+    );
+class PlutoColumnTypeOverLay implements PlutoColumnType {
+  @override
+  final dynamic defaultValue;
+
+  final PlutoOverlayBuilder overlayBuilder;
+
+  const PlutoColumnTypeOverLay({
+    this.defaultValue,
+    required this.overlayBuilder,
   });
 
   @override

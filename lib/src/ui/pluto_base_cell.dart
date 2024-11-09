@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/cells/pluto_overlay_cell.dart';
 
 import 'ui.dart';
 
@@ -349,6 +350,15 @@ class _CellState extends PlutoStateWithChange<_Cell> {
   @override
   Widget build(BuildContext context) {
     if (_showTypedCell && widget.column.enableEditingMode == true) {
+      if(widget.column.hasEditRenderer){
+        return widget.column.renderer!(PlutoColumnRendererContext(
+          column: widget.column,
+          rowIdx: widget.rowIdx,
+          row: widget.row,
+          cell: widget.cell,
+          stateManager: stateManager,
+        ));
+      }
       if (widget.column.type.isSelect) {
         return PlutoSelectCell(
           stateManager: stateManager,
@@ -393,6 +403,14 @@ class _CellState extends PlutoStateWithChange<_Cell> {
         );
       } else if (widget.column.type.isComboBox) {
         return PlutoComBoBoxCell(
+          stateManager: stateManager,
+          cell: widget.cell,
+          column: widget.column,
+          row: widget.row,
+        );
+      }
+      else if (widget.column.type.isOverlay) {
+        return PlutoOverlayCell(
           stateManager: stateManager,
           cell: widget.cell,
           column: widget.column,

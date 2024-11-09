@@ -119,6 +119,8 @@ class PlutoColumn {
   /// if you are defining custom cells with high paint cost.
   PlutoColumnRenderer? renderer;
 
+  PlutoColumnRenderer? editRender;
+
   /// A callback that returns a widget
   /// for expressing aggregate values at the bottom.
   ///
@@ -212,6 +214,7 @@ class PlutoColumn {
     this.applyFormatterInEditing = false,
     this.backgroundColor,
     this.renderer,
+    this.editRender,
     this.footerRenderer,
     this.suppressedAutoSize = false,
     this.enableColumnDrag = true,
@@ -237,6 +240,7 @@ class PlutoColumn {
   Key get key => _key;
 
   bool get hasRenderer => renderer != null;
+  bool get hasEditRenderer => editRender != null;
 
   bool get hasCheckReadOnly => _checkReadOnly != null;
 
