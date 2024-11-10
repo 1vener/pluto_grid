@@ -21,11 +21,14 @@ class PlutoOverlayCell extends StatefulWidget implements TextCell {
   @override
   final PlutoRow row;
 
+  final int rowIdx;
+
   const PlutoOverlayCell({
     required this.stateManager,
     required this.cell,
     required this.column,
     required this.row,
+    required this.rowIdx,
     super.key,
   });
 
@@ -237,53 +240,51 @@ class PlutoOverlayCellState extends State<PlutoOverlayCell> {
       cellFocus.requestFocus();
     }
 
-    return LayoutBuilder(builder: (ctx,constraint){
-      return  DropdownTheme(
-          child: MoonDropdown(
-            maxHeight: 200,
-            minHeight: 80,
-            maxWidth: constraint.maxWidth,
-            minWidth: constraint.minWidth,
-            show: _showDropdown,
-            constrainWidthToChild: false,
-            onTapOutside: () => _handleDropdownTapOutside(),
-            contentPadding: EdgeInsets.zero,
-            dropdownAnchorPosition: MoonDropdownAnchorPosition.bottomRight,
-            content: widget.column.type.overlay.overlayBuilder.call(widget.row,widget.cell,ctx),
-            child: TextField(
-              focusNode: cellFocus,
-              controller: _textController,
-              readOnly: true,
-              onTap: _handleOnTap,
-              style: widget.stateManager.configuration.style.cellTextStyle,
-              onTapOutside: (PointerDownEvent _) => _handleInputTapOutside(),
-              decoration: InputDecoration(
-                suffix: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4),
-                  child: GestureDetector(
-                    onTap: () => _openOverlay(),
-                    child: const Icon(
-                      CupertinoIcons.ellipsis,
-                      size: 16,
-                    ),
+    return DropdownTheme(
+        child: MoonDropdown(
+          show: _showDropdown,
+          constrainWidthToChild: false,
+          onTapOutside: () => _handleDropdownTapOutside(),
+          contentPadding: EdgeInsets.zero,
+          dropdownAnchorPosition: MoonDropdownAnchorPosition.bottomLeft,
+          content: widget.column.type.overlay.overlayBuilder.call(widget.row,widget.cell,widget.rowIdx,context,(){
+            setState(() {
+              _showDropdown = false;
+            });
+          }),
+          child: TextField(
+            focusNode: cellFocus,
+            controller: _textController,
+            readOnly: true,
+            onTap: _handleOnTap,
+            style: widget.stateManager.configuration.style.cellTextStyle,
+            // onTapOutside: (PointerDownEvent _) => _handleInputTapOutside(),
+            decoration: InputDecoration(
+              suffix: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                child: GestureDetector(
+                  onTap: () => _openOverlay(),
+                  child: const Icon(
+                    CupertinoIcons.ellipsis,
+                    size: 16,
                   ),
                 ),
-                border: OutlineInputBorder(
-                  borderSide: BorderSide.none,
-                ),
-                contentPadding: EdgeInsets.zero,
               ),
-              maxLines: 1,
-              keyboardType: keyboardType,
-              inputFormatters: inputFormatters,
-              textAlignVertical: TextAlignVertical.center,
-              textAlign: widget.column.textAlign.value,
+              border: OutlineInputBorder(
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: EdgeInsets.zero,
             ),
+            maxLines: 1,
+            keyboardType: keyboardType,
+            inputFormatters: inputFormatters,
+            textAlignVertical: TextAlignVertical.center,
+            textAlign: widget.column.textAlign.value,
           ),
-          data: Theme.of(context).brightness == Brightness.dark
-              ? DropdownThemeData.dark()
-              : DropdownThemeData.light());
-    },);
+        ),
+        data: Theme.of(context).brightness == Brightness.dark
+            ? DropdownThemeData.dark()
+            : DropdownThemeData.light());
   }
 }
 

@@ -415,6 +415,7 @@ class _CellState extends PlutoStateWithChange<_Cell> {
           cell: widget.cell,
           column: widget.column,
           row: widget.row,
+          rowIdx: widget.rowIdx,
         );
       }
     }

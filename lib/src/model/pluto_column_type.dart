@@ -584,7 +584,9 @@ class PlutoColumnTypeComboBox implements PlutoColumnType {
 typedef PlutoOverlayBuilder= Widget Function(
     PlutoRow row,
     PlutoCell cell,
+    int rowIdx,
     BuildContext context,
+    VoidCallback onClose,
     );
 class PlutoColumnTypeOverLay implements PlutoColumnType {
   @override

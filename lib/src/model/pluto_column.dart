@@ -305,7 +305,7 @@ class PlutoColumn {
       return type.applyFormat(value);
     }
 
-    return value.toString();
+    return value == null ? '' : value.toString();
   }
 
   String formattedValueForDisplay(dynamic value) {

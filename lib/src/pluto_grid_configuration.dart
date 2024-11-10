@@ -198,6 +198,7 @@ class PlutoGridStyleConfig {
     this.enableCellBorderVertical = true,
     this.enableCellBorderHorizontal = true,
     this.enableRowColorAnimation = false,
+    this.enableGridBorder = true,
     this.gridBackgroundColor = Colors.white,
     this.rowColor = Colors.white,
     this.oddRowColor,
@@ -254,6 +255,7 @@ class PlutoGridStyleConfig {
     this.enableCellBorderVertical = true,
     this.enableCellBorderHorizontal = true,
     this.enableRowColorAnimation = false,
+    this.enableGridBorder = true,
     this.gridBackgroundColor = const Color(0xFF111111),
     this.rowColor = const Color(0xFF111111),
     this.oddRowColor,
@@ -321,6 +323,7 @@ class PlutoGridStyleConfig {
   /// Animation of background color transition of rows,
   /// such as when the current row or rows are dragged.
   final bool enableRowColorAnimation;
+  final bool enableGridBorder;
 
   final Color gridBackgroundColor;
 
