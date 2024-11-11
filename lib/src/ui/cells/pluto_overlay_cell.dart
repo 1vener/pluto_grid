@@ -242,11 +242,12 @@ class PlutoOverlayCellState extends State<PlutoOverlayCell> {
 
     return DropdownTheme(
         child: MoonDropdown(
+          groupId: widget.column.type.overlay.groupId,
           show: _showDropdown,
           constrainWidthToChild: false,
           onTapOutside: () => _handleDropdownTapOutside(),
           contentPadding: EdgeInsets.zero,
-          dropdownAnchorPosition: MoonDropdownAnchorPosition.bottomLeft,
+          dropdownAnchorPosition: MoonDropdownAnchorPosition.vertical,
           content: widget.column.type.overlay.overlayBuilder.call(widget.row,widget.cell,widget.rowIdx,context,(){
             setState(() {
               _showDropdown = false;

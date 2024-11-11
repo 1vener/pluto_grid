@@ -289,6 +289,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
     return LayoutBuilder(builder: (ctx,constraint){
       return  DropdownTheme(
           child: MoonDropdown(
+            groupId: widget.column.type.comboBox.groupId,
             maxHeight: 200,
             minHeight: 80,
             maxWidth: constraint.maxWidth,

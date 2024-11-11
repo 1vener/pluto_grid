@@ -160,10 +160,12 @@ abstract class PlutoColumnType {
   factory PlutoColumnType.comboBox(
   AllOptionsBuilder optionsBuilder,{
     dynamic defaultValue = '',
+     String? groupId,
   }) {
     return PlutoColumnTypeComboBox(
       defaultValue: defaultValue,
       optionsBuilder:  optionsBuilder,
+      groupId:  groupId,
 
     );
   }
@@ -171,10 +173,12 @@ abstract class PlutoColumnType {
   factory PlutoColumnType.overlay(
       PlutoOverlayBuilder overlayBuilder,{
         dynamic defaultValue = '',
+        required String groupId,
       }) {
     return PlutoColumnTypeOverLay(
       defaultValue: defaultValue,
       overlayBuilder:  overlayBuilder,
+      groupId: groupId
 
     );
   }
@@ -559,10 +563,12 @@ class PlutoColumnTypeComboBox implements PlutoColumnType {
   final dynamic defaultValue;
 
   final AllOptionsBuilder optionsBuilder;
+  final String? groupId;
 
   const PlutoColumnTypeComboBox({
     this.defaultValue,
     required this.optionsBuilder,
+    this.groupId,
   });
 
   @override
@@ -593,10 +599,12 @@ class PlutoColumnTypeOverLay implements PlutoColumnType {
   final dynamic defaultValue;
 
   final PlutoOverlayBuilder overlayBuilder;
+  final String groupId;
 
   const PlutoColumnTypeOverLay({
     this.defaultValue,
     required this.overlayBuilder,
+    required this.groupId,
   });
 
   @override
