@@ -34,7 +34,6 @@ class _TableScrollbarState extends State<TableScrollbar> {
     double scrollBarSize = widget.stateManager.configuration.style.scrollBarSize;
     return
       LayoutBuilder(builder: (ctx,consts){
-        print('const:{$consts}');
         return Container(
             decoration: BoxDecoration(color: Colors.transparent,),
             // padding: EdgeInsets.only(top: widget.direction == Axis.vertical ? 24 : 0,bottom: widget.direction == Axis.vertical ? 24 : 0),
@@ -60,7 +59,6 @@ class _TableScrollbarState extends State<TableScrollbar> {
       return SizedBox(
         width: scrollBarSize,height: max(widget.stateManager.rowTotalHeight * widget.stateManager.refRows.length, consts.maxHeight),);
     }else{
-      print('maxWith:${max(_scrollWidth, consts.maxWidth)}');
       return SizedBox(width: max(_scrollWidth, consts.maxWidth),height: scrollBarSize,);
     }
   }
@@ -89,7 +87,6 @@ class _TableScrollbarState extends State<TableScrollbar> {
     }).toList();
     double width = 0;
     scrollColumnList.forEach((e) => width += e.width);
-    print('width---------{$width}');
     _scrollWidth = width;
   }
   @override
