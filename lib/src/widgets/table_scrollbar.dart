@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:pluto_grid/src/manager/pluto_grid_state_manager.dart';
+import 'package:pluto_grid/src/ui/miscellaneous/pluto_state_with_change.dart';
 
-class TableScrollbar extends StatefulWidget {
+class TableScrollbar extends PlutoStatefulWidget {
   final PlutoGridStateManager stateManager;
   final Axis direction;
   final double? height;
@@ -24,9 +25,10 @@ class TableScrollbar extends StatefulWidget {
   State<TableScrollbar> createState() => _TableScrollbarState();
 }
 
-class _TableScrollbarState extends State<TableScrollbar> {
+class _TableScrollbarState extends PlutoStateWithChange<TableScrollbar> {
   late ChangeNotifier _resizingChangeNotifier;
    double _scrollWidth = 0;
+   double _scrollHeight = 0;
 
 
   @override
@@ -54,10 +56,8 @@ class _TableScrollbarState extends State<TableScrollbar> {
 
   Widget _buildSizeBox(BoxConstraints consts,double scrollBarSize){
     if(widget.direction == Axis.vertical){
-      //widget.stateManager.rowTotalHeight * widget.stateManager.refRows.length
-      //widget.stateManager.scroll.maxScrollVertical
       return SizedBox(
-        width: scrollBarSize,height: max(widget.stateManager.rowTotalHeight * widget.stateManager.refRows.length, consts.maxHeight),);
+        width: scrollBarSize,height: max(_scrollHeight, consts.maxHeight),);
     }else{
       return SizedBox(width: max(_scrollWidth, consts.maxWidth),height: scrollBarSize,);
     }
@@ -70,28 +70,51 @@ class _TableScrollbarState extends State<TableScrollbar> {
   void initState() {
     _resizingChangeNotifier = widget.stateManager.resizingChangeNotifier;
     _resizingChangeNotifier.addListener(_updateState);
-    _calWidth();
+    widget.scrollController.addListener(_onScroll);
+    
+    _calSize();
     super.initState();
   }
 
   void _updateState(){
-    _calWidth();
+    
+    _calSize();
     setState(() {
     });
   }
 
-  void _calWidth(){
-    List<PlutoColumn> scrollColumnList = widget.stateManager.refColumns.where((e){
-      bool remove = e.hide;
-      return !remove;
-    }).toList();
-    double width = 0;
-    scrollColumnList.forEach((e) => width += e.width);
-    _scrollWidth = width;
+  void _onScroll() {
+    widget.scrollController.position.didUpdateScrollPositionBy(0);
+  }
+  
+
+  void _calSize(){
+      if(widget.direction == Axis.vertical){
+        _scrollHeight = widget.stateManager.rowTotalHeight * widget.stateManager.refRows.length ;
+      }else{
+        List<PlutoColumn> scrollColumnList = widget.stateManager.refColumns.where((e){
+          bool remove = e.hide;
+          return !remove;
+        }).toList();
+        double width = 0;
+        scrollColumnList.forEach((e) => width += e.width);
+        _scrollWidth = width;
+      }
   }
   @override
   void dispose() {
     _resizingChangeNotifier.removeListener(_updateState);
+    widget.stateManager.scroll.bodyRowsVertical!.removeListener(_onScroll);
     super.dispose();
+  }
+
+  @override
+  PlutoGridStateManager get stateManager => widget.stateManager;
+
+  @override
+  void updateState(PlutoNotifierEvent event) {
+    forceUpdate();
+
+    _calSize();
   }
 }

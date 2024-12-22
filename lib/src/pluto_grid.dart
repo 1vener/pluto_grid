@@ -1181,14 +1181,14 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         BoxConstraints.tight(Size(
           _safe(verticalScrollWidth),
           _safe(
-            size.height - _stateManager.configuration.style.columnHeight - horizontalScrollHeight,
+            size.height - _stateManager.configuration.style.columnHeight - horizontalScrollHeight - _stateManager.headerHeight,
           ),
         )),
       );
 
       positionChild(
         _StackName.verticalScroll,
-        Offset(size.width - verticalScrollWidth, _stateManager.configuration.style.columnHeight),
+        Offset(size.width - verticalScrollWidth, _stateManager.configuration.style.columnHeight + _stateManager.headerHeight),
       );
     }
     if (hasChild(_StackName.horizontalScroll)) {
