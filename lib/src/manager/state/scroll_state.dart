@@ -207,16 +207,16 @@ mixin ScrollState implements IPlutoGridState {
 
   @override
   void updateScrollViewport() {
-    // if (maxWidth == null ||
-    //     scroll.bodyRowsHorizontal?.position.hasViewportDimension != true) {
-    //   return;
-    // }
-    //
-    // final double bodyWidth = maxWidth! - bodyLeftOffset - bodyRightOffset;
-    //
-    // scroll.horizontal!.applyViewportDimension(bodyWidth);
-    //
-    // updateCorrectScrollOffset();
+    if (maxWidth == null ||
+        scroll.bodyRowsHorizontal?.position.hasViewportDimension != true) {
+      return;
+    }
+
+    final double bodyWidth = maxWidth! - bodyLeftOffset - bodyRightOffset;
+
+    scroll.horizontal!.applyViewportDimension(bodyWidth);
+
+    updateCorrectScrollOffset();
   }
 
   /// Called to fix an error
