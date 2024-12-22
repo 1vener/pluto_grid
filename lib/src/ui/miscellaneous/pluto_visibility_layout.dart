@@ -126,12 +126,30 @@ class PlutoVisibilityLayoutRenderObjectElement extends RenderObjectElement
     final bool sameMaxScrollExtent = _previousMaxScroll == _maxScrollExtent &&
         scrollController.position.maxScrollExtent == _maxScrollExtent;
 
+    // 如果边界范围和最大滚动范围都没有变化，则无需更新
     if (sameBoundScroll && sameMaxScrollExtent) {
       return;
     }
 
-    _previousMaxScroll = _maxScrollExtent;
+    // 仅更新必要的状态，避免过度重建
+    if (_previousMaxScroll != _maxScrollExtent) {
+      _previousMaxScroll = _maxScrollExtent;
+    }
 
+    // 在边界范围变化时触发局部更新逻辑
+    if (!sameBoundScroll) {
+      _updateVisibleBounds(_visibleFirst, _visibleLast);
+    }
+  }
+
+  void _updateVisibleBounds(double visibleFirst, double visibleLast) {
+    // 更新内部状态
+    _previousVisibleFirstX1 = visibleFirst - 1;
+    _previousVisibleFirstX2 = visibleFirst + 1;
+    _previousVisibleLastX1 = visibleLast - 1;
+    _previousVisibleLastX2 = visibleLast + 1;
+
+    // 触发局部刷新，例如通过 `setState` 或局部通知
     markNeedsBuild();
   }
 

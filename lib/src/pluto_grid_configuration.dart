@@ -72,6 +72,7 @@ class PlutoGridConfiguration {
   final PlutoGridColumnSizeConfig columnSize;
 
   final PlutoGridLocaleText localeText;
+  final ScrollbarThemeData? scrollbarThemeData;
 
   const PlutoGridConfiguration({
     this.enableMoveDownAfterSelecting = false,
@@ -84,6 +85,7 @@ class PlutoGridConfiguration {
     this.columnFilter = const PlutoGridColumnFilterConfig(),
     this.columnSize = const PlutoGridColumnSizeConfig(),
     this.localeText = const PlutoGridLocaleText(),
+    this.scrollbarThemeData
   });
 
   const PlutoGridConfiguration.dark({
@@ -97,6 +99,7 @@ class PlutoGridConfiguration {
     this.columnFilter = const PlutoGridColumnFilterConfig(),
     this.columnSize = const PlutoGridColumnSizeConfig(),
     this.localeText = const PlutoGridLocaleText(),
+    this.scrollbarThemeData
   });
 
   void updateLocale() {
@@ -139,6 +142,7 @@ class PlutoGridConfiguration {
     PlutoGridColumnFilterConfig? columnFilter,
     PlutoGridColumnSizeConfig? columnSize,
     PlutoGridLocaleText? localeText,
+    ScrollbarThemeData? scrollbarThemeData,
   }) {
     return PlutoGridConfiguration(
       enableMoveDownAfterSelecting:
@@ -153,6 +157,7 @@ class PlutoGridConfiguration {
       columnFilter: columnFilter ?? this.columnFilter,
       columnSize: columnSize ?? this.columnSize,
       localeText: localeText ?? this.localeText,
+      scrollbarThemeData : scrollbarThemeData ?? this.scrollbarThemeData,
     );
   }
 
@@ -172,7 +177,9 @@ class PlutoGridConfiguration {
             scrollbar == other.scrollbar &&
             columnFilter == other.columnFilter &&
             columnSize == other.columnSize &&
-            localeText == other.localeText;
+            localeText == other.localeText &&
+            scrollbarThemeData == other.scrollbarThemeData
+    ;
   }
 
   @override
@@ -187,6 +194,7 @@ class PlutoGridConfiguration {
         columnFilter,
         columnSize,
         localeText,
+        scrollbarThemeData,
       );
 }
 
@@ -246,6 +254,7 @@ class PlutoGridStyleConfig {
     this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
+    this.scrollBarSize = 16.0,
   });
 
   const PlutoGridStyleConfig.dark({
@@ -303,6 +312,7 @@ class PlutoGridStyleConfig {
     this.rowGroupEmptyIcon = Icons.noise_control_off,
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
+    this.scrollBarSize = 16.0,
   });
 
   /// Enable borderShadow in [PlutoGrid].
@@ -451,6 +461,8 @@ class PlutoGridStyleConfig {
   /// Apply border radius to popup opened inside [PlutoGrid].
   final BorderRadiusGeometry gridPopupBorderRadius;
 
+  final double scrollBarSize;
+
   PlutoGridStyleConfig copyWith({
     bool? enableGridBorderShadow,
     bool? enableColumnBorderVertical,
@@ -493,6 +505,7 @@ class PlutoGridStyleConfig {
     IconData? rowGroupEmptyIcon,
     BorderRadiusGeometry? gridBorderRadius,
     BorderRadiusGeometry? gridPopupBorderRadius,
+    double? scrollBarSize,
   }) {
     return PlutoGridStyleConfig(
       enableGridBorderShadow:
@@ -556,6 +569,7 @@ class PlutoGridStyleConfig {
       gridBorderRadius: gridBorderRadius ?? this.gridBorderRadius,
       gridPopupBorderRadius:
           gridPopupBorderRadius ?? this.gridPopupBorderRadius,
+      scrollBarSize: scrollBarSize ?? this.scrollBarSize,
     );
   }
 
@@ -605,7 +619,9 @@ class PlutoGridStyleConfig {
             rowGroupCollapsedIcon == other.rowGroupCollapsedIcon &&
             rowGroupEmptyIcon == other.rowGroupEmptyIcon &&
             gridBorderRadius == other.gridBorderRadius &&
-            gridPopupBorderRadius == other.gridPopupBorderRadius;
+            gridPopupBorderRadius == other.gridPopupBorderRadius &&
+            scrollBarSize == other.scrollBarSize
+          ;
   }
 
   @override
@@ -651,6 +667,7 @@ class PlutoGridStyleConfig {
         rowGroupEmptyIcon,
         gridBorderRadius,
         gridPopupBorderRadius,
+        scrollBarSize,
       ]);
 }
 
