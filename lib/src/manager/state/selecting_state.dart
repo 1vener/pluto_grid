@@ -69,12 +69,14 @@ abstract class ISelectingState {
   /// Sets the currentSelectingRows by range.
   /// [from] rowIdx of rows.
   /// [to] rowIdx of rows.
+  /// ctrl + shift + left或ctrl+A触发
   void setCurrentSelectingRowsByRange(int from, int to, {bool notify = true});
 
   /// Resets currently selected rows and cells.
+  /// PlutoGridCellGestureEvent stateManager.setEditing(true); line 57 触发
   void clearCurrentSelecting({bool notify = true});
 
-  /// Select or unselect a row.
+  /// Select or unselect a row. ctrl + left 触发
   void toggleSelectingRow(int rowIdx, {bool notify = true});
 
   bool isSelectingInteraction();
@@ -264,7 +266,7 @@ mixin SelectingState implements IPlutoGridState {
       );
     }
 
-    notifyListeners(notify, setCurrentSelectingPosition.hashCode);
+    notifyListeners(notify);
   }
 
   @override
@@ -361,7 +363,7 @@ mixin SelectingState implements IPlutoGridState {
 
     _state._currentSelectingRows = refRows.getRange(maxFrom, maxTo).toList();
 
-    notifyListeners(notify, setCurrentSelectingRowsByRange.hashCode);
+    notifyListeners(notify);
   }
 
   @override
@@ -370,7 +372,7 @@ mixin SelectingState implements IPlutoGridState {
 
     _clearCurrentSelectingRows(notify: false);
 
-    notifyListeners(notify, clearCurrentSelecting.hashCode);
+    notifyListeners(true);
   }
 
   @override
@@ -393,7 +395,7 @@ mixin SelectingState implements IPlutoGridState {
       currentSelectingRows.add(row);
     }
 
-    notifyListeners(notify, toggleSelectingRow.hashCode);
+    notifyListeners(notify);
   }
 
   @override
