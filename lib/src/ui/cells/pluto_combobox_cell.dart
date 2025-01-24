@@ -151,7 +151,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
   }
 
   void _changeValue() {
-    if(widget.cell.value == _textController.text){
+    if(formattedValue == _textController.text){
       return;
     }
     widget.stateManager.changeCellValue(widget.cell, _textController.text);
