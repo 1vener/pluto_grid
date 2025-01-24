@@ -332,7 +332,7 @@ class PlutoColumn {
 
     if (formatter != null) {
       final bool allowFormatting =
-          readOnly || type.isSelect || type.isTime || type.isDate;
+          readOnly || type.isSelect || type.isTime || type.isDate || type.isComboBox || type.isOverlay;
 
       if (applyFormatterInEditing && allowFormatting) {
         return formatter!(value).toString();
