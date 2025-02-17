@@ -51,8 +51,6 @@ class PlutoOverlayCellState extends State<PlutoOverlayCell> {
 
   bool _showDropdown = false;
 
-  Iterable<String> _options = [];
-  Iterable<String> _filteredOptionsList = [];
 
   @override
   TextInputType get keyboardType => TextInputType.text;
@@ -147,7 +145,7 @@ class PlutoOverlayCellState extends State<PlutoOverlayCell> {
   }
 
   void _changeValue() {
-    if(widget.cell.value == _textController.text){
+    if(formattedValue == _textController.text){
       return;
     }
     widget.stateManager.changeCellValue(widget.cell, _textController.text);
