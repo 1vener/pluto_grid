@@ -178,11 +178,12 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
     _filteredOptionsList = _options.where((String option) {
       return option.toLowerCase().contains(_textController.text.toLowerCase());
     });
-
-    setState(() {
-      // if (!_optionIsSelected && _selectedOption != null) _selectedOption = null;
-      _showDropdown = true;
-    });
+    if (mounted) {
+      setState(() {
+        // if (!_optionIsSelected && _selectedOption != null) _selectedOption = null;
+        _showDropdown = true;
+      });
+    }
   }
 
   void _handleOnComplete() {

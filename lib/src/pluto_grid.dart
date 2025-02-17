@@ -998,11 +998,12 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     }
 
     if (hasChild(_StackName.bodyColumns)) {
+      double sub = hasSubtractVerticalWidth == true ? 0 : verticalScrollWidth;
       var s = layoutChild(
         _StackName.bodyColumns,
         BoxConstraints.loose(
           Size(
-            _safe(size.width - bodyLeftOffset - bodyRightOffset),
+            _safe(size.width - bodyLeftOffset - bodyRightOffset - sub),
             size.height,
           ),
         ),
@@ -1204,7 +1205,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
       positionChild(
         _StackName.horizontalScroll,
-        Offset(0, size.height - horizontalScrollHeight),
+        Offset(bodyLeftOffset, size.height - horizontalScrollHeight),
       );
     }
 

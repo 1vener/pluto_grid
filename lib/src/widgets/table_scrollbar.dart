@@ -98,7 +98,7 @@ class _TableScrollbarState extends PlutoStateWithChange<TableScrollbar> {
         }).toList();
         double width = 0;
         scrollColumnList.forEach((e) => width += e.width);
-        _scrollWidth = width - widget.stateManager.style.scrollBarSize;
+        _scrollWidth = width;
       }
   }
   @override

@@ -51,8 +51,6 @@ class PlutoOverlayCellState extends State<PlutoOverlayCell> {
 
   bool _showDropdown = false;
 
-  Iterable<String> _options = [];
-  Iterable<String> _filteredOptionsList = [];
 
   @override
   TextInputType get keyboardType => TextInputType.text;
