@@ -840,6 +840,9 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
     //
     bool hasSubtractVerticalWidth = false;
+    if (hasChild(_StackName.rightFrozenRows)) {
+      hasSubtractVerticalWidth = true;
+    }
 
     // first layout header and footer and see what remains for the scrolling part
     if (hasChild(_StackName.header)) {
@@ -1134,7 +1137,6 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         ),
 
       );
-      hasSubtractVerticalWidth = true;
 
       positionChild(
         _StackName.rightFrozenRows,
@@ -1193,10 +1195,11 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       );
     }
     if (hasChild(_StackName.horizontalScroll)) {
+      double sub = hasSubtractVerticalWidth == true ? 0 : verticalScrollWidth;
       layoutChild(
         _StackName.horizontalScroll,
         BoxConstraints.tight(Size(
-          _safe(size.width - verticalScrollWidth),
+          _safe(size.width - sub - bodyLeftOffset -bodyRightOffset),
           _safe(
             horizontalScrollHeight,
           ),
