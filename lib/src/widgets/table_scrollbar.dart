@@ -98,9 +98,7 @@ class _TableScrollbarState extends PlutoStateWithChange<TableScrollbar> {
         }).toList();
         double width = 0;
         scrollColumnList.forEach((e) => width += e.width);
-        //当右边存在冻结列时，refRows不需要减去垂直滚动条的宽度，因为垂直滚动条的宽度在右侧冻结列的右边显示
-        double sub = widget.stateManager.bodyRightOffset > 0 ? 0.0 : widget.stateManager.style.scrollBarSize;
-        _scrollWidth = width - widget.stateManager.bodyLeftOffset - widget.stateManager.bodyRightOffset - sub;
+        _scrollWidth = width - widget.stateManager.bodyLeftOffset - widget.stateManager.bodyRightOffset;
       }
   }
   @override

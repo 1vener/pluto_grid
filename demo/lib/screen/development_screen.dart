@@ -1,4 +1,4 @@
-import 'package:faker/faker.dart';
+import 'package:faker/faker.dart' hide Color,Image;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
@@ -344,14 +344,14 @@ class ClassYouImplemented implements PlutoFilterType {
 
   @override
   get compare => ({
-        required String? base,
-        required String? search,
-        required PlutoColumn? column,
-      }) {
-        var keys = search!.split(',');
+    required String? base,
+    required String? search,
+    required PlutoColumn? column,
+  }) {
+    var keys = search!.split(',');
 
-        return keys.contains(base);
-      };
+    return keys.contains(base);
+  };
 
   const ClassYouImplemented();
 }
@@ -786,7 +786,7 @@ class _HeaderState extends State<_Header> {
             PlutoMenuItem.radio(
               title: 'AutoSize',
               initialRadioValue:
-                  widget.stateManager.columnSizeConfig.autoSizeMode,
+              widget.stateManager.columnSizeConfig.autoSizeMode,
               radioItems: PlutoAutoSizeMode.values,
               onChanged: handleAutoSize,
               getTitle: (option) => (option as PlutoAutoSizeMode).name,
@@ -849,7 +849,7 @@ class _HeaderState extends State<_Header> {
             PlutoMenuItem.radio(
               title: 'Resize',
               initialRadioValue:
-                  widget.stateManager.columnSizeConfig.resizeMode,
+              widget.stateManager.columnSizeConfig.resizeMode,
               radioItems: PlutoResizeMode.values,
               onChanged: handleResize,
               getTitle: (option) => (option as PlutoResizeMode).name,
@@ -893,7 +893,7 @@ class _HeaderState extends State<_Header> {
               title: 'GridMode',
               initialRadioValue: gridMode,
               radioItems:
-                  PlutoGridMode.values.where((e) => !e.isPopup).toList(),
+              PlutoGridMode.values.where((e) => !e.isPopup).toList(),
               onChanged: handleGridMode,
               getTitle: (option) => (option as PlutoGridMode).name,
             ),
@@ -1050,10 +1050,10 @@ final testColumnsA = [
     titleTextAlign: PlutoColumnTextAlign.center,
     enableAutoEditing: true,
     type: PlutoColumnType.date(
-        // headerFormat: 'yyyy 년 MM 월',
-        // startDate: DateTime(2022, 01, 09),
-        // endDate: DateTime(2022, 08, 10),
-        ),
+      // headerFormat: 'yyyy 년 MM 월',
+      // startDate: DateTime(2022, 01, 09),
+      // endDate: DateTime(2022, 08, 10),
+    ),
   ),
   PlutoColumn(
     title: 'column4',
@@ -1098,7 +1098,7 @@ final testColumnsA = [
     renderer: (rendererContext) {
       return Container(
         color:
-            rendererContext.cell.value % 2 == 0 ? Colors.yellow : Colors.teal,
+        rendererContext.cell.value % 2 == 0 ? Colors.yellow : Colors.teal,
       );
     },
   ),
