@@ -88,14 +88,7 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
       }
     });
   }
-
-  void _showAllOptionsList() async {
-      _options = await widget.allOptionsBuilder();
-    setState(() {
-      _filteredOptionsList = _options;
-      _showDropdown = !_showDropdown;
-    });
-  }
+  
 
   void _handleDropdownTapOutside() {
     setState(() {
@@ -133,6 +126,7 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
       return MoonDropdown(
         maxHeight: 200,
         show: _showDropdown,
+        borderColor: Theme.of(context).brightness == Brightness.dark ?   const Color(0xFF3F3F3F) : const Color(0xFFE5E5E5),
         constrainWidthToChild: true,
         onTapOutside: () => _handleDropdownTapOutside(),
         contentPadding: EdgeInsets.zero,

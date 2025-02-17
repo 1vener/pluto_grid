@@ -64,7 +64,7 @@ class DropdownThemeData {
             color: MacosColors.labelColor.darkColor),
         textColor: Colors.white,
         iconColor: Colors.white,
-        backgroundColor: Colors.black,
+        backgroundColor: MacosColors.contentBackgroundColor.darkColor,
         dropdownShadows: [
           BoxShadow(
             color: Color(0x8E000000),
@@ -136,7 +136,7 @@ class DropdownTheme extends StatelessWidget {
   /// context.
   static DropdownThemeData of(BuildContext context) {
     final _InheritedTheme? inheritedTheme =
-        context.dependOnInheritedWidgetOfExactType<_InheritedTheme>();
+    context.dependOnInheritedWidgetOfExactType<_InheritedTheme>();
     final DropdownThemeData data = inheritedTheme?.theme.data ?? _defaultTheme;
     return data;
   }
