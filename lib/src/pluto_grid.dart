@@ -1204,7 +1204,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
       positionChild(
         _StackName.horizontalScroll,
-        Offset(0, size.height - horizontalScrollHeight),
+        Offset(bodyLeftOffset, size.height - horizontalScrollHeight),
       );
     }
 
