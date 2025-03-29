@@ -558,16 +558,61 @@ class _ColumnTextWidgetState extends PlutoStateWithChange<_ColumnTextWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Text.rich(
-      TextSpan(
-        text: _title,
-        children: _children,
-      ),
-      style: stateManager.configuration.style.columnTextStyle,
-      overflow: TextOverflow.ellipsis,
-      softWrap: false,
-      maxLines: 1,
-      textAlign: widget.column.titleTextAlign.value,
-    );
+    if(widget.column.titleSpan != null && widget.column.secondLineTitleSpan != null){
+      return Column(
+        crossAxisAlignment: _textAlignToCrossAxisAlignment(widget.column.titleTextAlign.value,Directionality.of(context)) ,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+        Text.rich(
+          TextSpan(
+            text: _title,
+            children: _children,
+          ),
+          style: stateManager.configuration.style.columnTextStyle,
+          overflow: TextOverflow.ellipsis,
+          softWrap: false,
+          maxLines: 1,
+          textAlign: widget.column.titleTextAlign.value,
+        ),
+          Text.rich(
+            TextSpan(children: [widget.column.secondLineTitleSpan!]),
+            style: stateManager.configuration.style.columnTextStyle,
+            overflow: TextOverflow.ellipsis,
+            softWrap: false,
+            maxLines: 1,
+            textAlign: widget.column.titleTextAlign.value,
+          )
+        ],);
+    }else{
+      return Text.rich(
+        TextSpan(
+          text: _title,
+          children: _children,
+        ),
+        style: stateManager.configuration.style.columnTextStyle,
+        overflow: TextOverflow.ellipsis,
+        softWrap: false,
+        maxLines: 1,
+        textAlign: widget.column.titleTextAlign.value,
+      );
+    }
+
+  }
+
+  CrossAxisAlignment _textAlignToCrossAxisAlignment(TextAlign textAlign, TextDirection textDirection) {
+    switch (textAlign) {
+      case TextAlign.left:
+        return textDirection == TextDirection.ltr ? CrossAxisAlignment.start : CrossAxisAlignment.end;
+      case TextAlign.right:
+        return textDirection == TextDirection.ltr ? CrossAxisAlignment.end : CrossAxisAlignment.start;
+      case TextAlign.center:
+        return CrossAxisAlignment.center;
+      case TextAlign.justify:
+        return CrossAxisAlignment.stretch;
+      case TextAlign.start:
+        return CrossAxisAlignment.start;
+      case TextAlign.end:
+        return CrossAxisAlignment.end;
+    }
   }
 }

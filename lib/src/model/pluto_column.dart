@@ -63,6 +63,9 @@ class PlutoColumn {
   /// ```
   InlineSpan? titleSpan;
 
+  /// second line title
+  InlineSpan? secondLineTitleSpan;
+
   /// Customisable cell padding.
   /// It takes precedence over defaultCellPadding in PlutoGridConfiguration.
   EdgeInsets? cellPadding;
@@ -205,6 +208,7 @@ class PlutoColumn {
     this.titlePadding,
     this.filterPadding,
     this.titleSpan,
+    this.secondLineTitleSpan,
     this.cellPadding,
     this.textAlign = PlutoColumnTextAlign.start,
     this.titleTextAlign = PlutoColumnTextAlign.start,
