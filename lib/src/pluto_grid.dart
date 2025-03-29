@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
 import 'package:pluto_grid/pluto_grid.dart';
@@ -842,11 +843,8 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     double horizontalScrollHeight = _stateManager.configuration.style.scrollBarSize;
 
     //
-    bool hasSubtractVerticalWidth = false;
-    if (hasChild(_StackName.rightFrozenRows)) {
-      hasSubtractVerticalWidth = true;
-    }
-
+    bool showVerticalScrollBar =  _showScrollBar(size, Axis.vertical);
+    bool showHorizontalScrollBar =  _showScrollBar(size, Axis.horizontal);
     // first layout header and footer and see what remains for the scrolling part
     if (hasChild(_StackName.header)) {
       // maximum 40% of the height
@@ -911,7 +909,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     if (hasChild(_StackName.leftFrozenColumns)) {
       var s = layoutChild(
         _StackName.leftFrozenColumns,
-        BoxConstraints.loose(Size(size.width,size.height - horizontalScrollHeight)),
+        BoxConstraints.loose(size),
       );
 
       final double posX = isLTR ? 0 : size.width - s.width;
@@ -934,7 +932,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         BoxConstraints.tight(
           Size(
             PlutoGridSettings.gridBorderWidth,
-            _safe(size.height - columnsTopOffset - bodyRowsBottomOffset - horizontalScrollHeight),
+            _safe(size.height - columnsTopOffset - bodyRowsBottomOffset - (showHorizontalScrollBar ? horizontalScrollHeight :0)),
           ),
         ),
       );
@@ -958,7 +956,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     if (hasChild(_StackName.rightFrozenColumns)) {
       var s = layoutChild(
         _StackName.rightFrozenColumns,
-        BoxConstraints.loose(size),
+        BoxConstraints.loose(Size(size.width - (showVerticalScrollBar && bodyRightOffset > 0 ? verticalScrollWidth : 0),size.height)),
       );
 
       final double posX =
@@ -982,7 +980,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         BoxConstraints.tight(
           Size(
             PlutoGridSettings.gridBorderWidth,
-            _safe(size.height - columnsTopOffset - bodyRowsBottomOffset - horizontalScrollHeight),
+            _safe(size.height - columnsTopOffset - bodyRowsBottomOffset - (showHorizontalScrollBar ? horizontalScrollHeight : 0)),
           ),
         ),
       );
@@ -1004,12 +1002,11 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     }
 
     if (hasChild(_StackName.bodyColumns)) {
-      double sub = hasSubtractVerticalWidth == true ? 0 : verticalScrollWidth;
       var s = layoutChild(
         _StackName.bodyColumns,
         BoxConstraints.loose(
           Size(
-            _safe(size.width - bodyLeftOffset - bodyRightOffset - sub),
+            _safe(size.width - bodyLeftOffset - bodyRightOffset - (showVerticalScrollBar && bodyRightOffset == 0 ? verticalScrollWidth : 0)),
             size.height,
           ),
         ),
@@ -1088,13 +1085,12 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       final double posX = isLTR
           ? 0
           : size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth;
-
       layoutChild(
         _StackName.leftFrozenRows,
         BoxConstraints.loose(
           Size(
             offset,
-            _safe(size.height - bodyRowsTopOffset - bodyRowsBottomOffset - horizontalScrollHeight),
+            _safe(size.height - bodyRowsTopOffset - bodyRowsBottomOffset - (showHorizontalScrollBar ? horizontalScrollHeight : 0)),
           ),
         ),
       );
@@ -1129,13 +1125,12 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       final double posX = isLTR
           ? size.width - bodyRightOffset + PlutoGridSettings.gridBorderWidth
           : 0;
-
       layoutChild(
         _StackName.rightFrozenRows,
         BoxConstraints.loose(
           Size(
-            offset - verticalScrollWidth,
-            _safe(size.height - bodyRowsTopOffset - bodyRowsBottomOffset - horizontalScrollHeight),
+            offset - (showVerticalScrollBar && bodyRightOffset > 0 ? verticalScrollWidth : 0),
+            _safe(size.height - bodyRowsTopOffset - bodyRowsBottomOffset - (showHorizontalScrollBar ? horizontalScrollHeight : 0)),
           ),
         ),
 
@@ -1164,13 +1159,12 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     }
 
     if (hasChild(_StackName.bodyRows)) {
-      double sub = hasSubtractVerticalWidth == true ? 0 : verticalScrollWidth;
       layoutChild(
         _StackName.bodyRows,
         BoxConstraints.tight(Size(
-          _safe(size.width - bodyLeftOffset - bodyRightOffset - sub ),
+          _safe(size.width - bodyLeftOffset - bodyRightOffset - (showVerticalScrollBar && bodyRightOffset == 0 ? verticalScrollWidth : 0) ),
           _safe(
-            size.height - bodyRowsTopOffset - bodyRowsBottomOffset - horizontalScrollHeight,
+            size.height - bodyRowsTopOffset - bodyRowsBottomOffset - (showHorizontalScrollBar ? horizontalScrollHeight : 0),
           ),
         )),
       );
@@ -1185,9 +1179,9 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       layoutChild(
         _StackName.verticalScroll,
         BoxConstraints.tight(Size(
-          _safe(verticalScrollWidth),
+          _safe(showVerticalScrollBar ? verticalScrollWidth : 0),
           _safe(
-            size.height - _stateManager.configuration.style.columnHeight - horizontalScrollHeight - _stateManager.headerHeight,
+            size.height - _stateManager.configuration.style.columnHeight - (showHorizontalScrollBar ? horizontalScrollHeight : 0) - _stateManager.headerHeight,
           ),
         )),
       );
@@ -1198,13 +1192,12 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       );
     }
     if (hasChild(_StackName.horizontalScroll)) {
-      double sub = hasSubtractVerticalWidth == true ? 0 : verticalScrollWidth;
       layoutChild(
         _StackName.horizontalScroll,
         BoxConstraints.tight(Size(
-          _safe(size.width - sub - bodyLeftOffset -bodyRightOffset),
+          _safe(size.width - (showVerticalScrollBar && bodyRightOffset == 0 ? verticalScrollWidth : 0) - bodyLeftOffset -bodyRightOffset),
           _safe(
-            horizontalScrollHeight,
+            showHorizontalScrollBar ? horizontalScrollHeight : 0,
           ),
         )),
       );
@@ -1271,6 +1264,23 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
   }
 
   double _safe(double value) => max(0, value);
+
+  bool _showScrollBar(Size size,Axis direction){
+    if(Axis.horizontal == direction){
+      List<PlutoColumn> scrollColumnList = _stateManager.refColumns.where((e){
+        bool remove = e.hide;
+        return !remove;
+      }).toList();
+      double width = 0;
+      scrollColumnList.forEach((e) => width += e.width);
+      double scrollWidth = width - _stateManager.bodyLeftOffset - _stateManager.bodyRightOffset;
+      return  size.width < scrollWidth;
+
+    }else{
+      return size.height < _stateManager.rowTotalHeight * _stateManager.refRows.length;
+    }
+
+  }
 }
 
 class _GridContainer extends StatelessWidget {
