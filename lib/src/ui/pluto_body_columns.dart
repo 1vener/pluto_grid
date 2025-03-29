@@ -110,7 +110,9 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
       controller: _scroll,
       scrollDirection: Axis.horizontal,
       physics: const ClampingScrollPhysics(),
-      child: PlutoVisibilityLayout(
+      child: ColoredBox(
+        color: stateManager.style.columnBackgroundColor,
+        child: PlutoVisibilityLayout(
         delegate: MainColumnLayoutDelegate(
           stateManager: stateManager,
           columns: _columns,
@@ -123,7 +125,7 @@ class PlutoBodyColumnsState extends PlutoStateWithChange<PlutoBodyColumns> {
         children: _showColumnGroups == true
             ? _columnGroups.map(_makeColumnGroup).toList(growable: false)
             : _columns.map(_makeColumn).toList(growable: false),
-      ),
+      ),),
     );
   }
 }

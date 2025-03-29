@@ -74,6 +74,7 @@ class PlutoGridConfiguration {
   final PlutoGridLocaleText localeText;
   final ScrollbarThemeData? scrollbarThemeData;
 
+
   const PlutoGridConfiguration({
     this.enableMoveDownAfterSelecting = false,
     this.enableMoveHorizontalInEditing = false,
@@ -255,6 +256,7 @@ class PlutoGridStyleConfig {
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
     this.scrollBarSize = 16.0,
+    this.columnBackgroundColor = Colors.white,
   });
 
   const PlutoGridStyleConfig.dark({
@@ -313,6 +315,7 @@ class PlutoGridStyleConfig {
     this.gridBorderRadius = BorderRadius.zero,
     this.gridPopupBorderRadius = BorderRadius.zero,
     this.scrollBarSize = 16.0,
+    this.columnBackgroundColor = const Color(0xFF111111),
   });
 
   /// Enable borderShadow in [PlutoGrid].
@@ -463,6 +466,9 @@ class PlutoGridStyleConfig {
 
   final double scrollBarSize;
 
+  /// Set the column background color of [PlutoGrid].
+  final Color columnBackgroundColor;
+
   PlutoGridStyleConfig copyWith({
     bool? enableGridBorderShadow,
     bool? enableColumnBorderVertical,
@@ -506,6 +512,7 @@ class PlutoGridStyleConfig {
     BorderRadiusGeometry? gridBorderRadius,
     BorderRadiusGeometry? gridPopupBorderRadius,
     double? scrollBarSize,
+    Color? columnBackgroundColor,
   }) {
     return PlutoGridStyleConfig(
       enableGridBorderShadow:
@@ -570,6 +577,7 @@ class PlutoGridStyleConfig {
       gridPopupBorderRadius:
           gridPopupBorderRadius ?? this.gridPopupBorderRadius,
       scrollBarSize: scrollBarSize ?? this.scrollBarSize,
+      columnBackgroundColor: columnBackgroundColor ?? this.columnBackgroundColor
     );
   }
 
@@ -620,7 +628,8 @@ class PlutoGridStyleConfig {
             rowGroupEmptyIcon == other.rowGroupEmptyIcon &&
             gridBorderRadius == other.gridBorderRadius &&
             gridPopupBorderRadius == other.gridPopupBorderRadius &&
-            scrollBarSize == other.scrollBarSize
+            scrollBarSize == other.scrollBarSize &&
+            columnBackgroundColor == other.columnBackgroundColor
           ;
   }
 
@@ -668,6 +677,7 @@ class PlutoGridStyleConfig {
         gridBorderRadius,
         gridPopupBorderRadius,
         scrollBarSize,
+        columnBackgroundColor,
       ]);
 }
 
