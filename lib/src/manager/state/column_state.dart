@@ -609,14 +609,14 @@ mixin ColumnState implements IPlutoGridState {
     }else{
       titleTextWidth = _visualTextWidth(column.title, style.columnTextStyle);
     }
-
+    // -3 icon position dx is -3
     final calculatedTileWidth = titleTextWidth -
-        column.width +
+        column.width + style.iconSize -3 +
         [
           (column.titlePadding ?? style.defaultColumnTitlePadding).horizontal,
           if (column.enableRowChecked) _getEffectiveButtonWidth(context, checkBox: true),
           if (column.isShowRightIcon) style.iconSize,
-          8,
+          2,
         ].reduce((acc, a) => acc + a);
 
     final calculatedCellWidth = maxValueTextWidth -
