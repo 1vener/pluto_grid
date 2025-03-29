@@ -50,8 +50,8 @@ class PlutoColumnRightMenuDelegateDefault
           _buildRightMenuItem(context:context, text: localeText.unfreezeColumn,textColor: textColor, onPressed: ()=>stateManager.toggleFrozenColumn(column, PlutoColumnFrozen.none)),
 
         if (column.frozen.isFrozen != true) ...[
-          _buildRightMenuItem(context:context,text:  localeText.freezeColumnToStart,textColor: textColor, onPressed: ()=>stateManager.toggleFrozenColumn(column, PlutoColumnFrozen.start)),
-          _buildRightMenuItem(context:context,text:  localeText.freezeColumnToEnd,textColor: textColor, onPressed: ()=>stateManager.toggleFrozenColumn(column, PlutoColumnFrozen.end)),
+          _buildRightMenuItem(context:context,text:  localeText.freezeColumnToStart,textColor: textColor, onPressed: ()=>stateManager.toggleFrozenColumn(column, PlutoColumnFrozen.start),enabled: enoughFrozenColumnsWidth),
+          _buildRightMenuItem(context:context,text:  localeText.freezeColumnToEnd,textColor: textColor, onPressed: ()=>stateManager.toggleFrozenColumn(column, PlutoColumnFrozen.end),enabled: enoughFrozenColumnsWidth),
         ],
         const Divider(),
         _buildRightMenuItem(context:context,text:  localeText.autoFitColumn,textColor: textColor, onPressed: (){
@@ -64,8 +64,8 @@ class PlutoColumnRightMenuDelegateDefault
           _buildRightMenuItem(context:context,text:  localeText.setColumns,textColor: textColor, onPressed: ()=>stateManager.showSetColumnsPopup(context)),
         if (column.enableFilterMenuItem == true) ...[
           const Divider(),
-          _buildRightMenuItem(context:context,text:  localeText.setFilter,textColor: enoughFrozenColumnsWidth ? textColor : disableTextColor, onPressed: ()=>stateManager.showFilterPopup(context, calledColumn: column),enabled: enoughFrozenColumnsWidth),
-          _buildRightMenuItem(context:context,text:  localeText.resetFilter,textColor: enoughFrozenColumnsWidth ? textColor : disableTextColor, onPressed: ()=>stateManager.setFilter(null),enabled: enoughFrozenColumnsWidth),
+          _buildRightMenuItem(context:context,text:  localeText.setFilter,textColor: enoughFrozenColumnsWidth ? textColor : disableTextColor, onPressed: ()=>stateManager.showFilterPopup(context, calledColumn: column)),
+          _buildRightMenuItem(context:context,text:  localeText.resetFilter,textColor: enoughFrozenColumnsWidth ? textColor : disableTextColor, onPressed: ()=>stateManager.setFilter(null),enabled:  stateManager.hasFilter),
         ],
       ],),
     )
