@@ -1204,7 +1204,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
       positionChild(
         _StackName.horizontalScroll,
-        Offset(bodyLeftOffset, size.height - horizontalScrollHeight),
+        Offset(bodyLeftOffset, size.height - (showHorizontalScrollBar  ? verticalScrollWidth : 0)),
       );
     }
 
@@ -1273,7 +1273,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       }).toList();
       double width = 0;
       scrollColumnList.forEach((e) => width += e.width);
-      double scrollWidth = width - _stateManager.bodyLeftOffset - _stateManager.bodyRightOffset;
+      double scrollWidth = width ;
       return  size.width < scrollWidth;
 
     }else{
