@@ -82,6 +82,7 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
     this.createHeader,
     this.createFooter,
     PlutoColumnMenuDelegate? columnMenuDelegate,
+    PlutoColumnRightMenuDelegate? columnRightMenuDelegate,
     PlutoChangeNotifierFilterResolver? notifierFilterResolver,
     PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
     PlutoGridMode? mode,
@@ -92,6 +93,8 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
         ),
         columnMenuDelegate =
             columnMenuDelegate ?? const PlutoColumnMenuDelegateDefault(),
+        columnRightMenuDelegate =
+            columnRightMenuDelegate ?? const PlutoColumnRightMenuDelegateDefault(),
         notifierFilterResolver = notifierFilterResolver ??
             const PlutoNotifierFilterResolverDefault(),
         gridKey = GlobalKey() {
@@ -150,6 +153,9 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
 
   @override
   final PlutoColumnMenuDelegate columnMenuDelegate;
+
+  @override
+  final PlutoColumnRightMenuDelegate columnRightMenuDelegate;
 
   final PlutoChangeNotifierFilterResolver notifierFilterResolver;
 
@@ -226,6 +232,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
     super.createHeader,
     super.createFooter,
     super.columnMenuDelegate,
+    super.columnRightMenuDelegate,
     super.notifierFilterResolver,
     super.configuration,
     super.mode,

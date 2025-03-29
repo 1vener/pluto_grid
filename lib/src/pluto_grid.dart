@@ -74,6 +74,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.noRowsWidget,
     this.rowColorCallback,
     this.columnMenuDelegate,
+    this.columnRightMenuDelegate,
     this.configuration = const PlutoGridConfiguration(),
     this.notifierFilterResolver,
     this.mode = PlutoGridMode.normal,
@@ -299,6 +300,7 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// https://github.com/bosskmk/pluto_grid/blob/master/demo/lib/screen/feature/column_menu_screen.dart
   /// {@endtemplate}
   final PlutoColumnMenuDelegate? columnMenuDelegate;
+  final PlutoColumnRightMenuDelegate? columnRightMenuDelegate;
 
   /// {@template pluto_grid_property_configuration}
   /// In [configuration], you can change the style and settings or text used in [PlutoGrid].
@@ -527,6 +529,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       createHeader: widget.createHeader,
       createFooter: widget.createFooter,
       columnMenuDelegate: widget.columnMenuDelegate,
+      columnRightMenuDelegate: widget.columnRightMenuDelegate,
       notifierFilterResolver: widget.notifierFilterResolver,
       configuration: widget.configuration,
       mode: widget.mode,
