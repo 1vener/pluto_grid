@@ -13,7 +13,6 @@ class PlutoScaledCheckbox extends StatelessWidget {
 
   final Color? activeColor;
 
-  final Color checkColor;
 
   const PlutoScaledCheckbox({
     super.key,
@@ -23,7 +22,6 @@ class PlutoScaledCheckbox extends StatelessWidget {
     this.scale = 1.0,
     this.unselectedColor = Colors.black26,
     this.activeColor = Colors.lightBlue,
-    this.checkColor = const Color(0xFFDCF5FF),
   });
 
   @override
@@ -39,7 +37,15 @@ class PlutoScaledCheckbox extends StatelessWidget {
           tristate: tristate,
           onChanged: handleOnChanged,
           activeColor: value == null ? unselectedColor : activeColor,
-          checkColor: checkColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0),
+          ),
+          side: BorderSide(
+            color: value ?? false ? (activeColor ?? Colors.blue) : Colors.grey,
+            width: 1.5,
+          ),
+          overlayColor: const WidgetStatePropertyAll(Colors.transparent),
+          // checkColor: checkColor,
         ),
       ),
     );
