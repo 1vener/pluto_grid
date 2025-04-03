@@ -1267,6 +1267,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
   bool _showScrollBar(Size size,Axis direction){
     if(Axis.horizontal == direction){
+      bool showVertical = size.height < _stateManager.rowTotalHeight * _stateManager.refRows.length;
       List<PlutoColumn> scrollColumnList = _stateManager.refColumns.where((e){
         bool remove = e.hide;
         return !remove;
@@ -1274,7 +1275,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       double width = 0;
       scrollColumnList.forEach((e) => width += e.width);
       double scrollWidth = width ;
-      return  size.width < scrollWidth;
+      return  size.width < scrollWidth + (showVertical ? _stateManager.configuration.style.scrollBarSize : 0);
 
     }else{
       return size.height < _stateManager.rowTotalHeight * _stateManager.refRows.length;
