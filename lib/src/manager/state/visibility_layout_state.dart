@@ -43,6 +43,9 @@ mixin VisibilityLayoutState implements IPlutoGridState {
         offset += PlutoGridSettings.gridBorderWidth;
       }
     }
+    if(showVerticalScrollbar()){
+      offset += configuration.style.scrollBarSize;
+    }
 
     getColumnsAutoSizeHelper(
       columns: refColumns,

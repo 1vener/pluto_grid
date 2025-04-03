@@ -124,6 +124,9 @@ abstract class ILayoutState {
 
   @visibleForTesting
   void setGridGlobalOffset(Offset offset);
+
+  bool showVerticalScrollbar();
+  bool showHorizontalScrollbar();
 }
 
 class _State {
@@ -511,6 +514,21 @@ mixin LayoutState implements IPlutoGridState {
   @visibleForTesting
   void setGridGlobalOffset(Offset offset) {
     _state._gridGlobalOffset = offset;
+  }
+
+  bool showVerticalScrollbar(){
+    return refRows.length * rowTotalHeight + headerHeight + footerHeight > maxHeight!;
+  }
+  bool showHorizontalScrollbar(){
+    bool showVertical = showVerticalScrollbar();
+    List<PlutoColumn> scrollColumnList = refColumns.where((e){
+      bool remove = e.hide;
+      return !remove;
+    }).toList();
+    double width = 0;
+    scrollColumnList.forEach((e) => width += e.width);
+    double scrollWidth = width ;
+    return  maxWidth! < scrollWidth + (showVertical ? configuration.style.scrollBarSize : 0);
   }
 
   bool _updateSize(BoxConstraints size, bool firstLayout) {
