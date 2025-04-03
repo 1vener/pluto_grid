@@ -1181,7 +1181,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
         BoxConstraints.tight(Size(
           _safe(showVerticalScrollBar ? verticalScrollWidth : 0),
           _safe(
-            size.height - _stateManager.configuration.style.columnHeight - (showHorizontalScrollBar ? horizontalScrollHeight : 0) - _stateManager.headerHeight,
+            size.height - _stateManager.configuration.style.columnHeight - (showHorizontalScrollBar ? horizontalScrollHeight : 0) - _stateManager.headerHeight - _stateManager.footerHeight,
           ),
         )),
       );
@@ -1204,7 +1204,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
 
       positionChild(
         _StackName.horizontalScroll,
-        Offset(bodyLeftOffset, size.height - (showHorizontalScrollBar  ? verticalScrollWidth : 0)),
+        Offset(bodyLeftOffset, size.height - (showHorizontalScrollBar  ? verticalScrollWidth : 0) - _stateManager.footerHeight),
       );
     }
 
@@ -1278,7 +1278,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       return  size.width < scrollWidth + (showVertical ? _stateManager.configuration.style.scrollBarSize : 0);
 
     }else{
-      return size.height < _stateManager.rowTotalHeight * _stateManager.refRows.length;
+      return size.height < _stateManager.rowTotalHeight * _stateManager.refRows.length + _stateManager.headerHeight + _stateManager.footerHeight;
     }
 
   }
