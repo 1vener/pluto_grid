@@ -99,9 +99,7 @@ class PlutoBaseCell extends StatelessWidget
   }
 
   void Function(TapDownDetails details)? _onSecondaryTapOrNull() {
-    return stateManager.onRowSecondaryTap == null
-        ? null
-        : _handleOnSecondaryTap;
+    return _handleOnSecondaryTap;
   }
 
   @override

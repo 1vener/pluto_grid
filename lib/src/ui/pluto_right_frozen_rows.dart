@@ -53,21 +53,35 @@ class PlutoRightFrozenRowsState
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      controller: _scroll,
-      scrollDirection: Axis.vertical,
-      physics: const ClampingScrollPhysics(),
-      itemCount: _rows.length,
-      itemExtent: stateManager.rowTotalHeight,
-      itemBuilder: (ctx, i) {
-        return PlutoBaseRow(
-          key: ValueKey('right_frozen_row_${_rows[i].key}'),
-          rowIdx: i,
-          row: _rows[i],
-          columns: _columns,
-          stateManager: stateManager,
-        );
-      },
-    );
+    MenuController menuController = MenuController();
+
+    return GestureDetector(
+        behavior: HitTestBehavior.translucent,
+        onSecondaryTapDown: (details) =>
+            menuController.open(position: details.localPosition),
+        child: MenuAnchor(
+          controller: menuController,
+          consumeOutsideTap: true,
+          anchorTapClosesMenu: true,
+          menuChildren: stateManager.rowRightMenuDelegate
+              .buildMenuItems(stateManager: stateManager, context: context),
+          child: ListView.builder(
+            controller: _scroll,
+            scrollDirection: Axis.vertical,
+            physics: const ClampingScrollPhysics(),
+            itemCount: _rows.length,
+            itemExtent: stateManager.rowTotalHeight,
+            itemBuilder: (ctx, i) {
+              return PlutoBaseRow(
+                key: ValueKey('right_frozen_row_${_rows[i].key}'),
+                rowIdx: i,
+                row: _rows[i],
+                columns: _columns,
+                stateManager: stateManager,
+              );
+            },
+          ),
+        ));
+
   }
 }

@@ -5,6 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/helper/show_row_menu.dart';
 
 import 'state/cell_state.dart';
 import 'state/column_group_state.dart';
@@ -83,6 +84,7 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
     this.createFooter,
     PlutoColumnMenuDelegate? columnMenuDelegate,
     PlutoColumnRightMenuDelegate? columnRightMenuDelegate,
+    PlutoRowRightMenuDelegate? rowRightMenuDelegate,
     PlutoChangeNotifierFilterResolver? notifierFilterResolver,
     PlutoGridConfiguration configuration = const PlutoGridConfiguration(),
     PlutoGridMode? mode,
@@ -95,6 +97,7 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
             columnMenuDelegate ?? const PlutoColumnMenuDelegateDefault(),
         columnRightMenuDelegate =
             columnRightMenuDelegate ?? const PlutoColumnRightMenuDelegateDefault(),
+        rowRightMenuDelegate = rowRightMenuDelegate ?? const PlutoRowRightMenuDelegateDefault(),
         notifierFilterResolver = notifierFilterResolver ??
             const PlutoNotifierFilterResolverDefault(),
         gridKey = GlobalKey() {
@@ -154,8 +157,12 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
   @override
   final PlutoColumnMenuDelegate columnMenuDelegate;
 
-  @override
+
   final PlutoColumnRightMenuDelegate columnRightMenuDelegate;
+
+  final PlutoRowRightMenuDelegate rowRightMenuDelegate;
+
+  final MenuController rowMenuController = MenuController();
 
   final PlutoChangeNotifierFilterResolver notifierFilterResolver;
 
@@ -233,6 +240,7 @@ class PlutoGridStateManager extends PlutoGridStateChangeNotifier {
     super.createFooter,
     super.columnMenuDelegate,
     super.columnRightMenuDelegate,
+    super.rowRightMenuDelegate,
     super.notifierFilterResolver,
     super.configuration,
     super.mode,

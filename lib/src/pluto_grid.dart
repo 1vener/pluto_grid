@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/helper/show_row_menu.dart';
 import 'package:pluto_grid/src/widgets/table_scrollbar.dart';
 
 import 'helper/platform_helper.dart';
@@ -76,6 +77,7 @@ class PlutoGrid extends PlutoStatefulWidget {
     this.rowColorCallback,
     this.columnMenuDelegate,
     this.columnRightMenuDelegate,
+    this.rowRightMenuDelegate,
     this.configuration = const PlutoGridConfiguration(),
     this.notifierFilterResolver,
     this.mode = PlutoGridMode.normal,
@@ -302,6 +304,7 @@ class PlutoGrid extends PlutoStatefulWidget {
   /// {@endtemplate}
   final PlutoColumnMenuDelegate? columnMenuDelegate;
   final PlutoColumnRightMenuDelegate? columnRightMenuDelegate;
+  final PlutoRowRightMenuDelegate? rowRightMenuDelegate;
 
   /// {@template pluto_grid_property_configuration}
   /// In [configuration], you can change the style and settings or text used in [PlutoGrid].
@@ -531,6 +534,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       createFooter: widget.createFooter,
       columnMenuDelegate: widget.columnMenuDelegate,
       columnRightMenuDelegate: widget.columnRightMenuDelegate,
+      rowRightMenuDelegate: widget.rowRightMenuDelegate,
       notifierFilterResolver: widget.notifierFilterResolver,
       configuration: widget.configuration,
       mode: widget.mode,

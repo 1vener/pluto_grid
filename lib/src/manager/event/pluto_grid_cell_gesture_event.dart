@@ -106,14 +106,18 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
   }
 
   void _onSecondaryTap(PlutoGridStateManager stateManager) {
-    stateManager.onRowSecondaryTap!(
-      PlutoGridOnRowSecondaryTapEvent(
-        row: stateManager.getRowByIdx(rowIdx)!,
-        rowIdx: rowIdx,
-        cell: cell,
-        offset: offset,
-      ),
-    );
+    stateManager.setCurrentCell(cell, rowIdx);
+    if(stateManager.onRowSecondaryTap != null){
+      stateManager.onRowSecondaryTap!(
+        PlutoGridOnRowSecondaryTapEvent(
+          row: stateManager.getRowByIdx(rowIdx)!,
+          rowIdx: rowIdx,
+          cell: cell,
+          offset: offset,
+        ),
+      );
+    }
+
   }
 
   bool _setKeepFocusAndCurrentCell(PlutoGridStateManager stateManager) {
