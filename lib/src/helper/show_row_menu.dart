@@ -52,14 +52,6 @@ class PlutoRowRightMenuDelegateDefault
     bool enabled = true,
   }){
     return MenuItemButton(
-      style: Theme.of(context).menuButtonTheme.style?.copyWith(
-        backgroundColor: WidgetStateProperty.resolveWith((states){
-          if (states.contains(WidgetState.hovered)) {
-            return Theme.of(context).hoverColor;// 鼠标悬停时的颜色
-          }
-        }),
-        foregroundColor: WidgetStateProperty.all(enabled ? textColor : textColor.withOpacity(0.5)),
-      ),
       onPressed: enabled ? onPressed : null,
       child: SizedBox(
         height: 26,
