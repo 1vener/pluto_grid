@@ -390,10 +390,10 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
   final FocusNode _gridFocusNode = FocusNode();
 
   final LinkedScrollControllerGroup _verticalScroll =
-      LinkedScrollControllerGroup();
+  LinkedScrollControllerGroup();
 
   final LinkedScrollControllerGroup _horizontalScroll =
-      LinkedScrollControllerGroup();
+  LinkedScrollControllerGroup();
 
   final List<Function()> _disposeList = [];
 
@@ -670,11 +670,11 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                   child: PlutoBodyRows(_stateManager),
                 ),
                 LayoutId(
-                  id: _StackName.verticalScroll,
-                  child: TableScrollbar(stateManager: _stateManager, direction: Axis.vertical, scrollController: _verticalScrollBar)
+                    id: _StackName.verticalScroll,
+                    child: TableScrollbar(stateManager: _stateManager, direction: Axis.vertical, scrollController: _verticalScrollBar)
                 ),
                 LayoutId(
-                  id: _StackName.horizontalScroll,
+                    id: _StackName.horizontalScroll,
                     child: TableScrollbar(stateManager: _stateManager, direction: Axis.horizontal, scrollController: _horizontalScrollBar)
                 ),
                 LayoutId(
@@ -964,7 +964,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       );
 
       final double posX =
-          isLTR ? size.width - s.width + PlutoGridSettings.gridBorderWidth : 0;
+      isLTR ? size.width - s.width + PlutoGridSettings.gridBorderWidth : 0;
 
       positionChild(
         _StackName.rightFrozenColumns,
@@ -1017,7 +1017,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       );
 
       final double posX =
-          isLTR ? bodyLeftOffset : size.width - s.width - bodyRightOffset;
+      isLTR ? bodyLeftOffset : size.width - s.width - bodyRightOffset;
 
       positionChild(
         _StackName.bodyColumns,
@@ -1041,7 +1041,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       _stateManager.columnFooterHeight = s.height;
 
       final double posX =
-          isLTR ? bodyLeftOffset : size.width - s.width - bodyRightOffset;
+      isLTR ? bodyLeftOffset : size.width - s.width - bodyRightOffset;
 
       positionChild(
         _StackName.bodyColumnFooters,
@@ -1154,7 +1154,7 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
       );
 
       final double posX =
-          isLTR ? size.width - s.width + PlutoGridSettings.gridBorderWidth : 0;
+      isLTR ? size.width - s.width + PlutoGridSettings.gridBorderWidth : 0;
 
       positionChild(
         _StackName.rightFrozenColumnFooters,
@@ -1270,19 +1270,21 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
   double _safe(double value) => max(0, value);
 
   bool _showScrollBar(Size size,Axis direction){
-    if(Axis.horizontal == direction){
-      bool showVertical = size.height < _stateManager.rowTotalHeight * _stateManager.refRows.length;
-      List<PlutoColumn> scrollColumnList = _stateManager.refColumns.where((e){
-        bool remove = e.hide;
-        return !remove;
-      }).toList();
-      double width = 0;
-      scrollColumnList.forEach((e) => width += e.width);
-      double scrollWidth = width ;
-      return  size.width < scrollWidth + (showVertical ? _stateManager.configuration.style.scrollBarSize : 0);
+    bool showHorizontal = false;
+    bool showVertical = size.height < _stateManager.rowTotalHeight * _stateManager.refRows.length;
+    List<PlutoColumn> scrollColumnList = _stateManager.refColumns.where((e){
+      bool remove = e.hide;
+      return !remove;
+    }).toList();
+    double width = 0;
+    scrollColumnList.forEach((e) => width += e.width);
+    double scrollWidth = width ;
+    showHorizontal =   size.width < scrollWidth + (showVertical ? _stateManager.configuration.style.scrollBarSize : 0);
 
+    if(Axis.horizontal == direction){
+      return showHorizontal;
     }else{
-      return size.height < _stateManager.rowTotalHeight * _stateManager.refRows.length + _stateManager.headerHeight + _stateManager.footerHeight;
+      return size.height < _stateManager.rowTotalHeight * _stateManager.refRows.length + _stateManager.headerHeight + _stateManager.footerHeight + _stateManager.columnHeight + (showHorizontal ? _stateManager.configuration.style.scrollBarSize : 0);
     }
 
   }
@@ -1568,7 +1570,7 @@ class PlutoScrollBehavior extends MaterialScrollBehavior {
     required this.isMobile,
     Set<PointerDeviceKind>? userDragDevices,
   })  : _dragDevices = userDragDevices ??
-            (isMobile ? _mobileDragDevices : _desktopDragDevices),
+      (isMobile ? _mobileDragDevices : _desktopDragDevices),
         super();
 
   final bool isMobile;
@@ -1593,10 +1595,10 @@ class PlutoScrollBehavior extends MaterialScrollBehavior {
 
   @override
   Widget buildScrollbar(
-    BuildContext context,
-    Widget child,
-    ScrollableDetails details,
-  ) {
+      BuildContext context,
+      Widget child,
+      ScrollableDetails details,
+      ) {
     return child;
   }
 }
@@ -1649,7 +1651,7 @@ abstract class PlutoGridSettings {
 
   /// Column title - padding
   static const EdgeInsets columnTitlePadding =
-      EdgeInsets.symmetric(horizontal: 10);
+  EdgeInsets.symmetric(horizontal: 10);
 
   static const EdgeInsets columnFilterPadding = EdgeInsets.all(5);
 
