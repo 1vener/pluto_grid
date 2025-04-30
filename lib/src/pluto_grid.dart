@@ -1284,7 +1284,15 @@ class PlutoGridLayoutDelegate extends MultiChildLayoutDelegate {
     if(Axis.horizontal == direction){
       return showHorizontal;
     }else{
-      return size.height < _stateManager.rowTotalHeight * _stateManager.refRows.length + _stateManager.headerHeight + _stateManager.footerHeight + _stateManager.columnHeight + (showHorizontal ? _stateManager.configuration.style.scrollBarSize : 0);
+      return size.height <
+          _stateManager.rowTotalHeight * _stateManager.refRows.length +
+              _stateManager.headerHeight +
+              _stateManager.footerHeight +
+              _stateManager.columnHeight +
+              (showHorizontal
+                  ? _stateManager.configuration.style.scrollBarSize
+                  : 0) +
+              _stateManager.columnFilterHeight;
     }
 
   }

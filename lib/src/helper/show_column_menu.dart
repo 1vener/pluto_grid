@@ -34,7 +34,7 @@ class PlutoColumnRightMenuDelegateDefault
 
   @override
   List<Widget> buildMenuItems({required PlutoGridStateManager stateManager, required PlutoColumn column,required BuildContext context}) {
-    final Color textColor = stateManager.style.cellTextStyle.color!;
+    final Color textColor = Theme.of(context).brightness == Brightness.light ? const Color.fromRGBO(0, 0, 0, 0.85) : const Color.fromRGBO(255, 255, 255, 0.85);
 
     final Color disableTextColor = textColor.withOpacity(0.5);
 
@@ -235,18 +235,10 @@ Widget _buildRightMenuItem({
   bool enabled = true,
 }){
   return MenuItemButton(
-    style: Theme.of(context).menuButtonTheme.style?.copyWith(
-        backgroundColor: WidgetStateProperty.resolveWith((states){
-          if (states.contains(WidgetState.hovered)) {
-            return Theme.of(context).hoverColor;// 鼠标悬停时的颜色
-          }
-        }),
-        foregroundColor: WidgetStateProperty.all(enabled ? textColor : textColor.withOpacity(0.5)),
-    ),
+    style: enabled ? null : Theme.of(context).menuButtonTheme.style?.copyWith(foregroundColor: WidgetStatePropertyAll(textColor.withOpacity(0.5))),
     onPressed: enabled ? onPressed : null,
     child: SizedBox(
-      height: 26,
-      width: 120,
+      height: 24,
       child: Align(
         alignment: Alignment.centerLeft,
         child: Text(

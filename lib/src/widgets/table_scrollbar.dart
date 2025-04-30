@@ -39,18 +39,14 @@ class _TableScrollbarState extends PlutoStateWithChange<TableScrollbar> {
         return Container(
             decoration: BoxDecoration(color: Colors.transparent,),
             // padding: EdgeInsets.only(top: widget.direction == Axis.vertical ? 24 : 0,bottom: widget.direction == Axis.vertical ? 24 : 0),
-            child: ScrollbarTheme(data: Theme.of(context).scrollbarTheme.copyWith(
-                thumbVisibility: WidgetStatePropertyAll(true),
-                trackVisibility: WidgetStatePropertyAll(true)
-            ),
-              child: ScrollbarTheme(
-                data: widget.stateManager.configuration.scrollbarThemeData ?? Theme.of(ctx).scrollbarTheme,
-                child: Scrollbar(
+            child: ScrollbarTheme(
+              data: widget.stateManager.configuration.scrollbarThemeData ?? Theme.of(ctx).scrollbarTheme,
+              child: Scrollbar(
                   controller: widget.scrollController,
                   child: SingleChildScrollView(
                       controller: widget.scrollController,
                       scrollDirection: widget.direction,
-                      child: _buildSizeBox(consts,scrollBarSize))),),));
+                      child: _buildSizeBox(consts,scrollBarSize))),));
       },);
   }
 
