@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import 'dropdown_theme.dart';
+import 'package:pluto_grid/src/widgets/dropdown/dropdown_theme.dart';
 
 
 
@@ -166,11 +165,20 @@ class _MoonDropdownState extends State<MoonDropdown> with RouteAware, SingleTick
 
   bool _routeIsShowing = true;
 
-  bool get shouldShowDropdown => widget.show && _routeIsShowing;
+  Size _overlayEntrySize = const Size(0, 0);
 
+  bool get shouldShowDropdown => widget.show && _routeIsShowing;
+  final GlobalKey _overlayKey = GlobalKey();
   void _showDropdown() {
     _overlayEntry = OverlayEntry(builder: (BuildContext context) => _createOverlayContent());
     Overlay.of(context).insert(_overlayEntry!);
+    // 获取 OverlayEntry 的大小
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final renderBox = _overlayKey.currentContext?.findRenderObject() as RenderBox?;
+      if (renderBox != null) {
+        _overlayEntrySize = renderBox.size;
+      }
+    });
 
     _animationController!.value = 0;
     _animationController!.forward();
@@ -434,9 +442,16 @@ class _MoonDropdownState extends State<MoonDropdown> with RouteAware, SingleTick
           dropdownAnchorPosition = MoonDropdownAnchorPosition.bottomLeft;
           break;
         case MoonDropdownAnchorPosition.vertical:
-          dropdownAnchorPosition = dropdownTargetGlobalCenter.dy < overlayRenderBox.size.center(Offset.zero).dy
-              ? MoonDropdownAnchorPosition.bottom
-              : MoonDropdownAnchorPosition.top;
+
+          double topRemaining = dropdownTargetGlobalCenter.dy - targetRenderBox.size.height - effectiveDistanceToTarget;
+          double bottomRemaining = MediaQuery.of(context).size.height - dropdownTargetGlobalCenter.dy  - effectiveDistanceToTarget;
+          if(bottomRemaining >=_overlayEntrySize.height){
+            dropdownAnchorPosition = MoonDropdownAnchorPosition.bottom;
+          }else if(topRemaining >=_overlayEntrySize.height){
+            dropdownAnchorPosition = MoonDropdownAnchorPosition.top;
+          }else{
+            bottomRemaining >= topRemaining ? dropdownAnchorPosition = MoonDropdownAnchorPosition.bottom : dropdownAnchorPosition = MoonDropdownAnchorPosition.top;
+          }
           break;
         case MoonDropdownAnchorPosition.horizontal:
           dropdownAnchorPosition = dropdownTargetGlobalCenter.dx < overlayRenderBox.size.center(Offset.zero).dx
@@ -487,6 +502,7 @@ class _MoonDropdownState extends State<MoonDropdown> with RouteAware, SingleTick
                   child: DefaultTextStyle(
                     style: effectiveTextStyle.copyWith(color: effectiveTextColor),
                     child: Container(
+                      key: _overlayKey,
                       constraints: BoxConstraints(
                         minHeight: widget.minHeight ?? 0,
                         maxHeight: widget.maxHeight ?? double.infinity,

@@ -106,7 +106,11 @@ class PlutoGridCellGestureEvent extends PlutoGridEvent {
   }
 
   void _onSecondaryTap(PlutoGridStateManager stateManager) {
-    stateManager.setCurrentCell(cell, rowIdx);
+    List<PlutoRow> selectingRows = stateManager.currentSelectingRows;
+    stateManager.setCurrentCell(cell, rowIdx,notify: false);
+    stateManager.currentSelectingRows.clear();
+    stateManager.currentSelectingRows.addAll(selectingRows);
+    stateManager.notifyListeners();
     if(stateManager.onRowSecondaryTap != null){
       stateManager.onRowSecondaryTap!(
         PlutoGridOnRowSecondaryTapEvent(

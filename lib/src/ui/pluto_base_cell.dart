@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/pluto_grid.dart';
+import 'package:pluto_grid/src/ui/cells/pluto_multi_select_combobox_cell.dart';
 import 'package:pluto_grid/src/ui/cells/pluto_overlay_cell.dart';
 
 import 'ui.dart';
@@ -225,7 +226,8 @@ class _CellContainerState extends PlutoStateWithChange<_CellContainer> {
     }
 
     if (!isEditing) {
-      return selectingMode.isRow ? activatedColor : null;
+      //lerp 方法会在两种颜色之间进行线性插值，第二个参数 0.3 表示混合 30% 的白色。
+      return selectingMode.isRow ? Color.lerp(activatedColor, Colors.white, 0.3)! : null;
     }
 
     return readOnly == true ? cellColorInReadOnlyState : cellColorInEditState;
@@ -415,7 +417,14 @@ class _CellState extends PlutoStateWithChange<_Cell> {
           row: widget.row,
           rowIdx: widget.rowIdx,
         );
-      }
+      } else if (widget.column.type.isMultiSelect) {
+      return PlutoMultiSelectComboBoxCell(
+        stateManager: stateManager,
+        cell: widget.cell,
+        column: widget.column,
+        row: widget.row,
+      );
+    }
     }
 
     return PlutoDefaultCell(

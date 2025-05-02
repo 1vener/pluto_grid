@@ -183,6 +183,19 @@ abstract class PlutoColumnType {
     );
   }
 
+  factory PlutoColumnType.multiSelect(
+      AllOptionsBuilder optionsBuilder,{
+        dynamic defaultValue = '',
+        String? groupId,
+      }) {
+    return PlutoColumnTypeMultiSelect(
+      defaultValue: defaultValue,
+      optionsBuilder:  optionsBuilder,
+      groupId:  groupId,
+
+    );
+  }
+
   bool isValid(dynamic value);
 
   int compare(dynamic a, dynamic b);
@@ -206,6 +219,7 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
   bool get isComboBox => this is PlutoColumnTypeComboBox;
 
   bool get isOverlay => this is PlutoColumnTypeOverLay;
+  bool get isMultiSelect => this is PlutoColumnTypeMultiSelect;
 
 
   PlutoColumnTypeText get text {
@@ -254,6 +268,14 @@ extension PlutoColumnTypeExtension on PlutoColumnType {
     }
 
     return this as PlutoColumnTypeOverLay;
+  }
+
+  PlutoColumnTypeMultiSelect get multiSelect {
+    if (this is! PlutoColumnTypeMultiSelect) {
+      throw TypeError();
+    }
+
+    return this as PlutoColumnTypeMultiSelect;
   }
 
   PlutoColumnTypeDate get date {
@@ -623,6 +645,36 @@ class PlutoColumnTypeOverLay implements PlutoColumnType {
   }
 }
 
+class PlutoColumnTypeMultiSelect implements PlutoColumnType {
+  @override
+  final dynamic defaultValue;
+
+  final AllOptionsBuilder optionsBuilder;
+  final String? groupId;
+  final String splitStr;
+
+  const PlutoColumnTypeMultiSelect({
+    this.defaultValue,
+    required this.optionsBuilder,
+    this.groupId,
+    this.splitStr = ','
+  });
+
+  @override
+  bool isValid(dynamic value) {
+    return true;
+  }
+
+  @override
+  int compare(dynamic a, dynamic b) {
+    return _compareWithNull(a, b, () => a.toString().compareTo(b.toString()));
+  }
+
+  @override
+  dynamic makeCompareValue(dynamic v) {
+    return v.toString();
+  }
+}
 
 abstract class PlutoColumnTypeHasFormat<T> {
   const PlutoColumnTypeHasFormat({
