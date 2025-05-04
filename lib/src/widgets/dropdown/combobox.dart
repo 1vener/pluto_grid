@@ -2,10 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import '../macos_colors.dart';
-import '../color_utils.dart';
-
+import 'package:pluto_grid/src/widgets/color_utils.dart';
+import 'package:pluto_grid/src/widgets/dropdown/dropdown_theme.dart';
+import 'package:pluto_grid/src/widgets/macos_colors.dart';
 import 'dropdown.dart';
 
 typedef OptionsBuilder<T extends Object> = FutureOr<Iterable<T>> Function(
@@ -13,6 +12,8 @@ typedef OptionsBuilder<T extends Object> = FutureOr<Iterable<T>> Function(
 typedef AllOptionsBuilder<T extends Object> = FutureOr<Iterable<T>> Function();
 
 typedef ComboBoxInit = void Function(TextEditingController controller,FocusNode focusNode);
+const _kFormTextStyle = TextStyle(fontSize: 13,fontWeight: FontWeight.w500);
+const _kFormFieldHeight = 28.0;
 class ComboBox<T extends Object> extends StatefulWidget {
   const ComboBox({
     super.key,
@@ -28,6 +29,7 @@ class ComboBox<T extends Object> extends StatefulWidget {
     this.initValue,
     this.enabled = true,
     this.init,
+    this.titleInLine = true,
   });
 
   /// input only selected options;
@@ -43,6 +45,7 @@ class ComboBox<T extends Object> extends StatefulWidget {
   final T? initValue;
   final bool enabled;
   final ComboBoxInit? init;
+  final bool titleInLine;
 
 
   @override
@@ -67,7 +70,7 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
       _options = await widget.allOptionsBuilder();
     }
     var iterable =
-        await widget.optionsBuilder(_searchController.value, _options);
+    await widget.optionsBuilder(_searchController.value, _options);
     _filteredOptionsList = iterable.toList();
     setState(() {
       if (!_optionIsSelected && _selectedOption != null) _selectedOption = null;
@@ -88,12 +91,19 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
       }
     });
   }
-  
+
+  void _showAllOptionsList() async {
+    _options = await widget.allOptionsBuilder();
+    setState(() {
+      _filteredOptionsList = _options;
+      _showDropdown = !_showDropdown;
+    });
+  }
 
   void _handleDropdownTapOutside() {
     setState(() {
       _showDropdown = false;
-      if (!_optionIsSelected && widget.onlySelected) _searchController.clear();
+      if (!_optionIsSelected && widget.onlySelected && !_options.contains(_searchController.text)) _searchController.clear();
       _focusNode.unfocus();
       FocusScope.of(context).unfocus();
     });
@@ -101,7 +111,7 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
 
   void _handleInputTapOutside() {
     if (_focusNode.hasFocus && !_showDropdown) {
-      if (!_optionIsSelected && widget.onlySelected) _searchController.clear();
+      if (!_optionIsSelected && widget.onlySelected && !_options.contains(_searchController.text)) _searchController.clear();
       _focusNode.unfocus();
       FocusScope.of(context).unfocus();
     }
@@ -112,59 +122,176 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
     _searchController.dispose();
     _scrollController.dispose();
     _focusNode.dispose();
+    print('disopse men');
     super.dispose();
+
   }
 
   @override
   Widget build(BuildContext context) {
-    print('build combobox');
+    // maxWidth: constraint.maxWidth -
+    //     textFieldIconWidth -
+    //     textFieldIconPaddingWidth -4,
+    // minWidth: constraint.maxWidth -
+    // textFieldIconWidth -
+    // textFieldIconPaddingWidth -4,
+    Widget child = TextField(
+      textAlignVertical: TextAlignVertical.center,
+      style: _kFormTextStyle,
+      maxLines: 1,
+      cursorHeight: 13,
+      controller: _searchController,
+      focusNode: _focusNode,
+      canRequestFocus: true,
+      enabled: widget.enabled,
+      // hintText: "Choose an option",
+      onTapOutside: (PointerDownEvent _) =>
+          _handleInputTapOutside(),
+      onChanged: (String _) => _performSearch(),
+      onEditingComplete: () {
+        print('onEditingComplete:${_searchController.value}');
+      },
+      onSubmitted: (value) {
+        print('onSubmitted:$value');
+      },
+      decoration: InputDecoration(
+        icon: widget.textFieldIcon != null && widget.titleInLine
+            ? SizedBox(
+          width: widget.textFieldIconWidth,
+          child: widget.textFieldIcon,
+        )
+            : null,
+        constraints: const BoxConstraints(
+          maxHeight: _kFormFieldHeight,
+          minHeight: _kFormFieldHeight,
+          minWidth: 50.0,
+        ),
+        suffixIcon: GestureDetector(
+          onTap: () => _showAllOptionsList(),
+          child: AnimatedRotation(
+            duration: const Duration(milliseconds: 200),
+            turns: _showDropdown ? -0.5 : 0,
+            child: const Icon(
+              CupertinoIcons.chevron_down,
+              size: 14,
+            ),
+          ),
+        ),
+        isCollapsed: false,
+        filled: true,
+        fillColor: Theme.of(context).brightness == Brightness.dark
+            ? MacosColors.textFieldBackground.darkColor
+            : MacosColors.textFieldBackground.color,
+        hoverColor: Colors.transparent,
+        contentPadding:
+        EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5.0),
+          borderSide: BorderSide(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? MacosColors.disabledControlTextColor.darkColor
+                  : MacosColors.disabledControlTextColor.color,
+              width: 1),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5.0),
+          borderSide: BorderSide(
+              color: Theme.of(context).brightness == Brightness.dark
+                  ? MacosColors.selectedControlTextColor.darkColor
+                  : MacosColors.selectedControlTextColor.color,
+              width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+            borderRadius:
+            const BorderRadius.all(Radius.circular(5.0)),
+            borderSide: BorderSide(
+                color: Theme.of(context)
+                    .primaryColor
+                    .withOpacity(0.2),
+                width: 3)),
+      ),
+    );
+    if(widget.titleInLine == false && widget.textFieldIcon != null){
+      child  = Column(
+        children: [
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(padding: EdgeInsets.only(bottom: 6),child: widget.textFieldIcon!,),
+          ),
+          child
+        ],
+      );
+    }
     return LayoutBuilder(builder: (context, constraint) {
       double textFieldIconWidth = widget.textFieldIconWidth ?? 0;
-
       ///textField decoration.icon has 16 padding at end @see InputDecorator line:2292 final Widget? icon = decoration.icon == null ? null :
       double textFieldIconPaddingWidth = 16;
-      return MoonDropdown(
-        maxHeight: 200,
-        show: _showDropdown,
-        borderColor: Theme.of(context).brightness == Brightness.dark ?   const Color(0xFF3F3F3F) : const Color(0xFFE5E5E5),
-        constrainWidthToChild: true,
-        onTapOutside: () => _handleDropdownTapOutside(),
-        contentPadding: EdgeInsets.zero,
-        dropdownAnchorPosition: MoonDropdownAnchorPosition.bottomRight,
-        backgroundColor: Color.fromRGBO(250, 250, 250, 1),
-        content: widget.optionsViewBuilder != null
-            ? widget.optionsViewBuilder!(
+      late double maxWidth;
+      late double minWidth;
+      late Offset offset ;
+      if(textFieldIconWidth > 0){
+        maxWidth = constraint.maxWidth -
+            textFieldIconWidth -
+            textFieldIconPaddingWidth -4;
+        minWidth = constraint.maxWidth -
+            textFieldIconWidth -
+            textFieldIconPaddingWidth -4;
+        offset = Offset((textFieldIconWidth + textFieldIconPaddingWidth) /2, 0);
+      }else{
+        maxWidth = constraint.maxWidth;
+        minWidth = constraint.maxWidth;
+        offset = const Offset(0, 0);
+      }
+
+      return DropdownTheme(
+          data: Theme.of(context).brightness == Brightness.dark
+              ? DropdownThemeData.dark()
+              : DropdownThemeData.light(),
+          child: MoonDropdown(
+            maxHeight: 200,
+            minHeight: 80,
+            maxWidth: maxWidth,
+            minWidth: minWidth,
+            show: _showDropdown,
+            borderColor: Theme.of(context).brightness == Brightness.dark
+                ? const Color(0xFF3F3F3F)
+                : const Color(0xFFE5E5E5),
+            constrainWidthToChild: false,
+            onTapOutside: () => _handleDropdownTapOutside(),
+            contentPadding: EdgeInsets.zero,
+            dropdownAnchorPosition: MoonDropdownAnchorPosition.vertical,
+            offset: offset,
+            content: widget.optionsViewBuilder != null
+                ? widget.optionsViewBuilder!(
                 context, _handleSelect, _filteredOptionsList)
-            : ConstrainedBox(
-                constraints: BoxConstraints(
-                    maxWidth: constraint.maxWidth -
-                        textFieldIconWidth -
-                        textFieldIconPaddingWidth -4),
-                child: Scrollbar(
-                  controller: _scrollController,
-                  child: ListView.builder(
-                    padding: const EdgeInsets.all(4),
-                    controller: _scrollController,
-                    primary: false,
-                    itemCount: _filteredOptionsList.length,
-                    cacheExtent: 10,
-                    itemExtent: 22,
-                    itemBuilder: (BuildContext context, int index) {
-                      return TextButton(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                WidgetStateProperty.resolveWith((states) {
-                              if (states.contains(WidgetState.hovered)) {
-                                return Theme.of(context).primaryColor;
-                              } else {
-                                return Colors.transparent;
-                              }
-                            }),
-                            maximumSize: WidgetStateProperty.all(Size(100, 22)),
-                            minimumSize: WidgetStateProperty.all(Size(50, 22)),
-                            animationDuration: Duration.zero,
-                            // 设置文字颜色，使用textstyle无效
-                            foregroundColor: WidgetStateProperty.resolveWith(
+                : Scrollbar(
+              controller: _scrollController,
+              child: ListView.builder(
+                shrinkWrap: true,
+                padding: const EdgeInsets.all(4),
+                controller: _scrollController,
+                primary: false,
+                itemCount: _filteredOptionsList.length,
+                cacheExtent: 10,
+                itemExtent: 22,
+                itemBuilder: (BuildContext context, int index) {
+                  return TextButton(
+                    style: ButtonStyle(
+                        backgroundColor:
+                        WidgetStateProperty.resolveWith((states) {
+                          if (states.contains(WidgetState.hovered)) {
+                            return Theme.of(context).primaryColor;
+                          } else {
+                            return Colors.transparent;
+                          }
+                        }),
+                        maximumSize:
+                        WidgetStateProperty.all(Size(100, 22)),
+                        minimumSize:
+                        WidgetStateProperty.all(Size(50, 22)),
+                        animationDuration: Duration.zero,
+                        // 设置文字颜色，使用textstyle无效
+                        foregroundColor: WidgetStateProperty.resolveWith(
                                 (Set<WidgetState> states) {
                               if (states.contains(WidgetState.hovered)) {
                                 return ColorUtils.textLuminance(
@@ -175,51 +302,28 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
                                     : MacosColors.labelColor.color;
                               }
                             }),
-                            shape: WidgetStateProperty.all(
-                                RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(5)))),
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                              _filteredOptionsList.elementAt(index).toString()),
-                        ),
-                        onPressed: () {
-                          _handleSelect(_filteredOptionsList.elementAt(index));
-                        },
-                      );
+                        shape: WidgetStateProperty.all(
+                            RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(5)))),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(_filteredOptionsList
+                          .elementAt(index)
+                          .toString()),
+                    ),
+                    onPressed: () {
+                      _handleSelect(
+                          _filteredOptionsList.elementAt(index));
                     },
-                  ),
-                ),
+                  );
+                },
               ),
-        child: widget.fieldViewBuilder != null
-            ? widget.fieldViewBuilder!(
+            ),
+            child: widget.fieldViewBuilder != null
+                ? widget.fieldViewBuilder!(
                 context, _searchController, _focusNode, () {})
-            : TextField(
-                textAlignVertical: TextAlignVertical.center,
-                style: const TextStyle(fontSize: 13, height: 1),
-                maxLines: 1,
-                cursorHeight: 13,
-                controller: _searchController,
-                focusNode: _focusNode,
-                canRequestFocus: true,
-                enabled: widget.enabled,
-                // hintText: "Choose an option",
-                onTapOutside: (PointerDownEvent _) => _handleInputTapOutside(),
-                onChanged: (String _) => _performSearch(),
-                onEditingComplete: () {
-                  print('onEditingComplete:${_searchController.value}');
-                },
-                onSubmitted: (value) {
-                  print('onSubmitted:$value');
-                },
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
-                  ),
-                  contentPadding: EdgeInsets.zero,
-                ),
-              ),
-      );
+                : child,
+          ));
     });
   }
 

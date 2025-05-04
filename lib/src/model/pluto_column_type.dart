@@ -1,4 +1,3 @@
-import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart' as intl;
@@ -579,7 +578,7 @@ class PlutoColumnTypeTime
     return v;
   }
 }
-typedef AllOptionsBuilder = FutureOr<List<dynamic>> Function();
+
 class PlutoColumnTypeComboBox implements PlutoColumnType {
   @override
   final dynamic defaultValue;

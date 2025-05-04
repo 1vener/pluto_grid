@@ -3,13 +3,11 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/src/widgets/color_utils.dart';
+import 'package:pluto_grid/src/widgets/dropdown/combobox.dart';
 import 'package:pluto_grid/src/widgets/dropdown/dropdown_theme.dart';
 import 'package:pluto_grid/src/widgets/macos_colors.dart';
 import 'dropdown.dart';
 
-typedef OptionsBuilder<T extends Object> = FutureOr<Iterable<T>> Function(
-    TextEditingValue textEditingValue, Iterable<T> options);
-typedef AllOptionsBuilder<T extends Object> = FutureOr<Iterable<T>> Function();
 
 typedef ComboBoxOnSelected<T extends Object> = void Function(T option,bool isSelected);
 
@@ -19,8 +17,6 @@ Widget Function(
     ComboBoxOnSelected<T> onSelected,
     Iterable<T> options,
     );
-
-typedef ComboBoxInit = void Function(TextEditingController controller,FocusNode focusNode);
 
 const _kFormFieldHeigh = 28.0;
 class MultiSelectComboBox<T extends Object> extends StatefulWidget {

@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pluto_grid/pluto_grid.dart';
 import 'package:pluto_grid/src/helper/platform_helper.dart';
-import '../../widgets/dropdown/dropdown.dart';
-import '../../widgets/dropdown/dropdown_theme.dart';
-import '../../widgets/color_utils.dart';
-import '../../widgets/macos_colors.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:pluto_grid/src/widgets/color_utils.dart';
+import 'package:pluto_grid/src/widgets/macos_colors.dart';
 
 import 'text_cell.dart';
 
@@ -168,7 +166,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
 
   Future<void> _performSearch() async {
     if (_options.isEmpty) {
-      List<dynamic> list = await widget.column.type.comboBox.optionsBuilder.call();
+      Iterable<dynamic> list = await widget.column.type.comboBox.optionsBuilder.call();
       _options = list.map((e) => e.toString())
           .toList();
     }
@@ -271,7 +269,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
   }
 
   void _showAllOptionsList() async {
-    List<dynamic> list = await widget.column.type.comboBox.optionsBuilder.call();
+    Iterable<dynamic> list = await widget.column.type.comboBox.optionsBuilder.call();
     _options = list.map((e) => e.toString())
         .toList();
     setState(() {
@@ -323,8 +321,8 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
                             return Colors.transparent;
                           }
                         }),
-                        maximumSize: WidgetStateProperty.all(Size(100, 22)),
-                        minimumSize: WidgetStateProperty.all(Size(50, 22)),
+                        maximumSize: WidgetStateProperty.all(const Size(100, 22)),
+                        minimumSize: WidgetStateProperty.all(const Size(50, 22)),
                         animationDuration: Duration.zero,
                         // 设置文字颜色，使用textstyle无效
                         foregroundColor: WidgetStateProperty.resolveWith(
@@ -364,7 +362,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
               onTapOutside: (PointerDownEvent _) => _handleInputTapOutside(),
               decoration: InputDecoration(
                 suffix: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 4),
+                  padding: const EdgeInsets.symmetric(horizontal: 4),
                   child: GestureDetector(
                     onTap: () => _showAllOptionsList(),
                     child: AnimatedRotation(

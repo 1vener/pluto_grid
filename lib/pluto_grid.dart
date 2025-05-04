@@ -50,3 +50,7 @@ export './src/widgets/pluto_scaled_checkbox.dart';
 export './src/widgets/pluto_scrollbar.dart';
 export './src/widgets/pluto_shadow_container.dart';
 export './src/widgets/pluto_shadow_line.dart';
+export './src/widgets/dropdown/dropdown.dart';
+export './src/widgets/dropdown/dropdown_theme.dart';
+export './src/widgets/dropdown/combobox.dart';
+export './src/widgets/dropdown/multi_select_combobox.dart';

@@ -172,12 +172,20 @@ class _MoonDropdownState extends State<MoonDropdown> with RouteAware, SingleTick
   void _showDropdown() {
     _overlayEntry = OverlayEntry(builder: (BuildContext context) => _createOverlayContent());
     Overlay.of(context).insert(_overlayEntry!);
-    // 获取 OverlayEntry 的大小
+
+    // 使用多个帧回调来确保尺寸计算正确
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final renderBox = _overlayKey.currentContext?.findRenderObject() as RenderBox?;
-      if (renderBox != null) {
-        _overlayEntrySize = renderBox.size;
-      }
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        final renderBox = _overlayKey.currentContext?.findRenderObject() as RenderBox?;
+        if (renderBox != null) {
+          setState(() {
+            _overlayEntrySize = renderBox.size;
+          });
+          // 重新构建 overlay 以使用新的尺寸
+          _updateDropdown();
+        }
+      });
     });
 
     _animationController!.value = 0;
@@ -443,14 +451,17 @@ class _MoonDropdownState extends State<MoonDropdown> with RouteAware, SingleTick
           break;
         case MoonDropdownAnchorPosition.vertical:
 
-          double topRemaining = dropdownTargetGlobalCenter.dy - targetRenderBox.size.height - effectiveDistanceToTarget;
-          double bottomRemaining = MediaQuery.of(context).size.height - dropdownTargetGlobalCenter.dy  - effectiveDistanceToTarget;
-          if(bottomRemaining >=_overlayEntrySize.height){
+          double targetHalfHeight = targetRenderBox.size.height / 2;
+          double topRemaining = dropdownTargetGlobalCenter.dy - targetRenderBox.size.height;
+          double bottomRemaining = MediaQuery.of(context).size.height - dropdownTargetGlobalCenter.dy  - effectiveDistanceToTarget - targetHalfHeight;
+          if (bottomRemaining >= _overlayEntrySize.height) {
             dropdownAnchorPosition = MoonDropdownAnchorPosition.bottom;
-          }else if(topRemaining >=_overlayEntrySize.height){
+          } else if (topRemaining >= _overlayEntrySize.height) {
             dropdownAnchorPosition = MoonDropdownAnchorPosition.top;
-          }else{
-            bottomRemaining >= topRemaining ? dropdownAnchorPosition = MoonDropdownAnchorPosition.bottom : dropdownAnchorPosition = MoonDropdownAnchorPosition.top;
+          } else {
+            bottomRemaining >= topRemaining
+                ? dropdownAnchorPosition = MoonDropdownAnchorPosition.bottom
+                : dropdownAnchorPosition = MoonDropdownAnchorPosition.top;
           }
           break;
         case MoonDropdownAnchorPosition.horizontal:
