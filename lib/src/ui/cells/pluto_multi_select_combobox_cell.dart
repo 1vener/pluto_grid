@@ -431,7 +431,9 @@ class PlutoMultiSelectComboBoxCellState extends State<PlutoMultiSelectComboBoxCe
         alignment: Alignment.centerLeft,
         child: Text(_filteredOptionsList
             .elementAt(index)
-            .toString()),
+            .toString(),
+          overflow: TextOverflow.ellipsis,
+        ),
       ),
       const Spacer(),
       Checkbox(

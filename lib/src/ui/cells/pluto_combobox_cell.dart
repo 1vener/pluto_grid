@@ -341,7 +341,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child:
-                      Text(_filteredOptionsList.elementAt(index).toString()),
+                      Text(_filteredOptionsList.elementAt(index).toString(),overflow: TextOverflow.ellipsis),
                     ),
                     onPressed: () {
                       _handleSelect(_filteredOptionsList.elementAt(index));
