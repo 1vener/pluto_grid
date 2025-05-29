@@ -135,6 +135,9 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
     // minWidth: constraint.maxWidth -
     // textFieldIconWidth -
     // textFieldIconPaddingWidth -4,
+    Color fillColor = Theme.of(context).brightness == Brightness.dark
+        ? widget.enabled == true ? MacosColors.textFieldBackground.darkColor :  const Color.fromRGBO(255, 255, 255, 0.01)
+        : widget.enabled == true ? MacosColors.textFieldBackground.color :  const Color(0xfff6f6f9);
     Widget child = TextField(
       textAlignVertical: TextAlignVertical.center,
       style: _kFormTextStyle,
@@ -179,9 +182,7 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
         ),
         isCollapsed: false,
         filled: true,
-        fillColor: Theme.of(context).brightness == Brightness.dark
-            ? MacosColors.textFieldBackground.darkColor
-            : MacosColors.textFieldBackground.color,
+        fillColor: fillColor,
         hoverColor: Colors.transparent,
         contentPadding:
         EdgeInsets.symmetric(vertical: 0, horizontal: 8),
@@ -309,7 +310,9 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
                       alignment: Alignment.centerLeft,
                       child: Text(_filteredOptionsList
                           .elementAt(index)
-                          .toString()),
+                          .toString(),
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                     onPressed: () {
                       _handleSelect(

@@ -113,6 +113,9 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
 
   @override
   Widget build(BuildContext context) {
+    Color fillColor = Theme.of(context).brightness == Brightness.dark
+        ? widget.enabled == true ? MacosColors.textFieldBackground.darkColor :  const Color.fromRGBO(255, 255, 255, 0.01)
+        : widget.enabled == true ? MacosColors.textFieldBackground.color :  const Color(0xfff6f6f9);
     Widget child = TextField(
       textAlignVertical: TextAlignVertical.center,
       style:  const TextStyle(fontSize: 13, height: 1),
@@ -151,6 +154,8 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
           borderSide: BorderSide.none,
         ),
         contentPadding: EdgeInsets.zero,
+        filled: true,
+        fillColor: fillColor,
       ),
       readOnly: true,
     );
