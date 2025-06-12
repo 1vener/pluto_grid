@@ -78,8 +78,7 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
           consumeOutsideTap: true,
           anchorTapClosesMenu: true,
           controller: stateManager.rowMenuController,
-          menuChildren: stateManager.rowRightMenuDelegate
-              .buildMenuItems(stateManager: stateManager, context: context),
+          menuChildren: stateManager.rowRightMenuDelegate?.buildMenuItems(stateManager: stateManager, context: context) ?? [],
           child: SingleChildScrollView(
             controller: _horizontalScroll,
             scrollDirection: Axis.horizontal,

@@ -97,7 +97,7 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
             columnMenuDelegate ?? const PlutoColumnMenuDelegateDefault(),
         columnRightMenuDelegate =
             columnRightMenuDelegate ?? const PlutoColumnRightMenuDelegateDefault(),
-        rowRightMenuDelegate = rowRightMenuDelegate ?? const PlutoRowRightMenuDelegateDefault(),
+        rowRightMenuDelegate = rowRightMenuDelegate ,
         notifierFilterResolver = notifierFilterResolver ??
             const PlutoNotifierFilterResolverDefault(),
         gridKey = GlobalKey() {
@@ -160,7 +160,7 @@ class PlutoGridStateChangeNotifier extends PlutoChangeNotifier
 
   final PlutoColumnRightMenuDelegate columnRightMenuDelegate;
 
-  final PlutoRowRightMenuDelegate rowRightMenuDelegate;
+  final PlutoRowRightMenuDelegate? rowRightMenuDelegate;
 
   final MenuController rowMenuController = MenuController();
 
