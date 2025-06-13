@@ -148,6 +148,7 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
       canRequestFocus: true,
       enabled: widget.enabled,
       // hintText: "Choose an option",
+      onTap: () => _performSearch(),
       onTapOutside: (PointerDownEvent _) =>
           _handleInputTapOutside(),
       onChanged: (String _) => _performSearch(),

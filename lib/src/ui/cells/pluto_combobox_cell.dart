@@ -177,7 +177,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
     if (mounted) {
       setState(() {
         // if (!_optionIsSelected && _selectedOption != null) _selectedOption = null;
-        // _showDropdown = true;
+        _showDropdown = true;
       });
     }
   }
@@ -246,6 +246,7 @@ class PlutoComBoBoxCellState extends State<PlutoComBoBoxCell> {
 
   void _handleOnTap() {
     widget.stateManager.setKeepFocus(true);
+    _performSearch();
   }
 
   void _handleDropdownTapOutside() {
