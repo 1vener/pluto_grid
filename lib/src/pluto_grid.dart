@@ -797,13 +797,14 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
                 if (_stateManager.showLoading)
                   LayoutId(
                     id: _StackName.loading,
-                    child: PlutoLoading(
-                      level: _stateManager.loadingLevel,
-                      backgroundColor: style.gridBackgroundColor,
-                      indicatorColor: style.activatedBorderColor,
-                      text: _stateManager.localeText.loadingText,
-                      textStyle: style.cellTextStyle,
-                    ),
+                    child: _stateManager.customLoadingWidget ??
+                        PlutoLoading(
+                          level: _stateManager.loadingLevel,
+                          backgroundColor: style.gridBackgroundColor,
+                          indicatorColor: style.activatedBorderColor,
+                          text: _stateManager.localeText.loadingText,
+                          textStyle: style.cellTextStyle,
+                        ),
                   ),
 
                 /// NoRows

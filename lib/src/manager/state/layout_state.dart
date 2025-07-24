@@ -95,6 +95,10 @@ abstract class ILayoutState {
 
   bool get isRTL;
 
+  /// Custom widget to display when loading is enabled.
+  /// If provided, this takes precedence over the default loading widget.
+  Widget? get customLoadingWidget;
+
   /// Update screen size information when LayoutBuilder builds.
   void setLayout(BoxConstraints size);
 
@@ -107,6 +111,7 @@ abstract class ILayoutState {
   void setShowLoading(
     bool flag, {
     PlutoGridLoadingLevel level = PlutoGridLoadingLevel.grid,
+    Widget? customLoadingWidget,
     bool notify = true,
   });
 
@@ -155,6 +160,8 @@ class _State {
   PlutoGridLoadingLevel _loadingLevel = PlutoGridLoadingLevel.grid;
 
   TextDirection _textDirection = TextDirection.ltr;
+
+  Widget? _customLoadingWidget;
 }
 
 mixin LayoutState implements IPlutoGridState {
@@ -398,6 +405,10 @@ mixin LayoutState implements IPlutoGridState {
   bool get isRTL => textDirection == TextDirection.rtl;
 
   @override
+  Widget? get customLoadingWidget => _state._customLoadingWidget;
+
+
+  @override
   void setLayout(BoxConstraints size) {
     final firstLayout = maxWidth == null;
     final changedSize = _updateSize(size, firstLayout);
@@ -458,15 +469,24 @@ mixin LayoutState implements IPlutoGridState {
   void setShowLoading(
     bool flag, {
     PlutoGridLoadingLevel level = PlutoGridLoadingLevel.grid,
+    Widget? customLoadingWidget,
     bool notify = true,
   }) {
-    if (showLoading == flag) {
+    // Early return if nothing changed
+    if (flag == _state._showLoading &&
+        level == _state._loadingLevel &&
+        customLoadingWidget == _state._customLoadingWidget) {
       return;
     }
 
-    _state._showLoading = flag;
+    // When custom loading widget is provided, always use grid level regardless of the level parameter
+    final effectiveLevel = customLoadingWidget != null
+        ? PlutoGridLoadingLevel.grid
+        : level;
 
-    _state._loadingLevel = level;
+    _state._showLoading = flag;
+    _state._loadingLevel = effectiveLevel;
+    _state._customLoadingWidget = customLoadingWidget;
 
     notifyListeners(notify, setShowLoading.hashCode);
   }
