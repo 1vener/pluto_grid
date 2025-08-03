@@ -628,7 +628,7 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
       ));
     }
 
-    return _keyManager.eventResult.consume(KeyEventResult.handled);
+    return _keyManager.eventResult.consume(KeyEventResult.ignored);
   }
 
 
