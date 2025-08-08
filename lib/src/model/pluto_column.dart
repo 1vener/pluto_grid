@@ -20,6 +20,29 @@ typedef PlutoColumnCheckReadOnly = bool Function(
   PlutoCell cell,
 );
 
+typedef PlutoCellTextColorCallback = Color Function(
+    PlutoCellColorContext cellColorContext);
+
+class PlutoCellColorContext {
+  final PlutoGridStateManager stateManager;
+
+  final int rowIdx;
+
+  final PlutoRow row;
+
+  final PlutoColumn column;
+
+  final PlutoCell cell;
+
+  const PlutoCellColorContext({
+    required this.row,
+    required this.rowIdx,
+    required this.column,
+    required this.cell,
+    required this.stateManager,
+  });
+}
+
 class PlutoColumn {
   /// A title to be displayed on the screen.
   /// If a titleSpan value is set, the title value is not displayed.
@@ -197,6 +220,9 @@ class PlutoColumn {
   /// Hide the column.
   bool hide;
 
+  /// Calculate text color based on background color
+  PlutoCellTextColorCallback? textColorCallback;
+
   PlutoColumn({
     required this.title,
     required this.field,
@@ -233,6 +259,7 @@ class PlutoColumn {
     this.enableAutoEditing = false,
     this.enableEditingMode = true,
     this.hide = false,
+    this.textColorCallback
   })  : _key = UniqueKey(),
         _checkReadOnly = checkReadOnly;
 
