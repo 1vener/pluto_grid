@@ -492,16 +492,15 @@ class _DefaultCellWidget extends StatelessWidget {
     }
 
     if(column.textColorCallback != null){
-      final color = column.textColorCallback!(
-        PlutoCellColorContext(row: row, rowIdx: rowIdx, column: column, cell: cell, stateManager: stateManager
-        ),
-      );
       return Text(
         _text,
         style: stateManager.configuration.style.cellTextStyle.copyWith(
           decoration: TextDecoration.none,
           fontWeight: FontWeight.normal,
-          color: color
+          color:  column.textColorCallback!(
+            PlutoCellColorContext(row: row, rowIdx: rowIdx, column: column, cell: cell, stateManager: stateManager
+            ),
+          )
         ),
         overflow: TextOverflow.ellipsis,
         textAlign: column.textAlign.value,
