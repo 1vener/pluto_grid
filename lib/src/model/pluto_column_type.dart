@@ -173,12 +173,13 @@ abstract class PlutoColumnType {
       PlutoOverlayBuilder overlayBuilder,{
         dynamic defaultValue = '',
         required String groupId,
+        bool readOnly = true
       }) {
     return PlutoColumnTypeOverLay(
       defaultValue: defaultValue,
       overlayBuilder:  overlayBuilder,
-      groupId: groupId
-
+      groupId: groupId,
+      readOnly: readOnly
     );
   }
 
@@ -621,11 +622,13 @@ class PlutoColumnTypeOverLay implements PlutoColumnType {
 
   final PlutoOverlayBuilder overlayBuilder;
   final String groupId;
+  final bool readOnly;
 
   const PlutoColumnTypeOverLay({
     this.defaultValue,
     required this.overlayBuilder,
     required this.groupId,
+    required this.readOnly,
   });
 
   @override

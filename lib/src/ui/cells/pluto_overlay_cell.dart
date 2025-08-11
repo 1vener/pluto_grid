@@ -206,7 +206,9 @@ class PlutoOverlayCellState extends State<PlutoOverlayCell> {
 
   void _handleOnTap() {
     widget.stateManager.setKeepFocus(true);
-    _openOverlay();
+    if(!widget.column.readOnly && widget.column.type.overlay.readOnly){
+      _openOverlay();
+    }
   }
 
   void _handleDropdownTapOutside() {
@@ -239,6 +241,9 @@ class PlutoOverlayCellState extends State<PlutoOverlayCell> {
     }
 
     return DropdownTheme(
+        data: Theme.of(context).brightness == Brightness.dark
+            ? DropdownThemeData.dark()
+            : DropdownThemeData.light(),
         child: MoonDropdown(
           groupId: widget.column.type.overlay.groupId,
           show: _showDropdown,
@@ -254,7 +259,13 @@ class PlutoOverlayCellState extends State<PlutoOverlayCell> {
           child: TextField(
             focusNode: cellFocus,
             controller: _textController,
-            readOnly: true,
+            onEditingComplete: (){
+              _changeValue();
+            },
+            onChanged: (_){
+              _cellEditingStatus = _CellEditingStatus.changed;
+            },
+            readOnly: widget.column.type.overlay.readOnly,
             onTap: _handleOnTap,
             style: widget.stateManager.configuration.style.cellTextStyle,
             // onTapOutside: (PointerDownEvent _) => _handleInputTapOutside(),
@@ -280,10 +291,7 @@ class PlutoOverlayCellState extends State<PlutoOverlayCell> {
             textAlignVertical: TextAlignVertical.center,
             textAlign: widget.column.textAlign.value,
           ),
-        ),
-        data: Theme.of(context).brightness == Brightness.dark
-            ? DropdownThemeData.dark()
-            : DropdownThemeData.light());
+        ));
   }
 }
 
