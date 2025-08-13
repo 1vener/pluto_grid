@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart' show Intl;
 import 'package:pluto_grid/pluto_grid.dart';
@@ -628,12 +627,8 @@ class PlutoGridState extends PlutoStateWithChange<PlutoGrid> {
         event: event,
       ));
     }
-    if(const SingleActivator(LogicalKeyboardKey.tab).accepts(event, HardwareKeyboard.instance)){
-      return _keyManager.eventResult.consume(KeyEventResult.handled);
-    }else{
-      return _keyManager.eventResult.consume(KeyEventResult.ignored);
-    }
 
+    return _keyManager.eventResult.consume(KeyEventResult.ignored);
   }
 
 
