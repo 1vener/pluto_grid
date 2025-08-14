@@ -384,33 +384,35 @@ class _MoonDropdownState extends State<MoonDropdown> with RouteAware, SingleTick
   }
 
   Widget _createOverlayContent() {
+    var dropdownThemeData = DropdownTheme.of(context);
+
     final BorderRadiusGeometry effectiveBorderRadius =
-        widget.borderRadius ?? DropdownTheme.of(context).borderRadius;
+        widget.borderRadius ?? dropdownThemeData.borderRadius;
 
     final Color effectiveBackgroundColor =
-        widget.backgroundColor ?? DropdownTheme.of(context).backgroundColor ;
+        widget.backgroundColor ?? dropdownThemeData.backgroundColor ;
 
-    final Color effectiveTextColor = DropdownTheme.of(context).textColor ;
+    final Color effectiveTextColor = dropdownThemeData.textColor ;
 
-    final Color effectiveIconColor = DropdownTheme.of(context).iconColor ;
+    final Color effectiveIconColor = dropdownThemeData.iconColor ;
 
-    final TextStyle effectiveTextStyle = DropdownTheme.of(context).textStyle;
+    final TextStyle effectiveTextStyle = dropdownThemeData.textStyle;
 
     final double effectiveDistanceToTarget =
-        widget.distanceToTarget ?? DropdownTheme.of(context).distanceToTarget;
+        widget.distanceToTarget ?? dropdownThemeData.distanceToTarget;
 
     final EdgeInsetsGeometry effectiveContentPadding =
-        widget.contentPadding ?? DropdownTheme.of(context).contentPadding;
+        widget.contentPadding ?? dropdownThemeData.contentPadding;
 
     final EdgeInsets resolvedContentPadding = effectiveContentPadding.resolve(Directionality.of(context));
 
     final EdgeInsetsGeometry effectiveDropdownMargin =
-        widget.dropdownMargin ?? DropdownTheme.of(context).dropdownMargin;
+        widget.dropdownMargin ?? dropdownThemeData.dropdownMargin;
 
     final EdgeInsets resolvedDropdownMargin = effectiveDropdownMargin.resolve(Directionality.of(context));
 
     final List<BoxShadow> effectiveDropdownShadows =
-        widget.dropdownShadows ?? DropdownTheme.of(context).dropdownShadows;
+        widget.dropdownShadows ?? dropdownThemeData.dropdownShadows;
 
     MoonDropdownAnchorPosition dropdownAnchorPosition = widget.dropdownAnchorPosition;
 
@@ -546,11 +548,12 @@ class _MoonDropdownState extends State<MoonDropdown> with RouteAware, SingleTick
 
   @override
   Widget build(BuildContext context) {
+    var dropdownThemeData = DropdownTheme.of(context);
     final Duration effectiveTransitionDuration = widget.transitionDuration ??
-        DropdownTheme.of(context).transitionDuration ;
+        dropdownThemeData.transitionDuration ;
 
     final Curve effectiveTransitionCurve = widget.transitionCurve ??
-        DropdownTheme.of(context).transitionCurve ;
+        dropdownThemeData.transitionCurve ;
 
     _animationController ??= AnimationController(
       duration: effectiveTransitionDuration,

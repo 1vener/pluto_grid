@@ -114,48 +114,37 @@ class DropdownThemeData {
 /// See also:
 ///
 ///  * [DropdownThemeData], which describes the actual configuration of a theme.
-class DropdownTheme extends StatelessWidget {
+class DropdownTheme  extends InheritedTheme  {
   /// Applies the given theme [data] to [child].
   ///
   /// The [data] and [child] arguments must not be null.
   const DropdownTheme({
-    Key? key,
-    required this.child,
+    super.key,
     required this.data,
-  }) : super(key: key);
+    required super.child,
+  });
 
   /// Specifies the theme for descendant widgets.
   final DropdownThemeData data;
 
-  /// The widget below this widget in the tree.
-  final Widget child;
 
   static final DropdownThemeData _defaultTheme = DropdownThemeData.light();
 
   /// The data from the closest [DropdownTheme] instance that encloses the given
   /// context.
   static DropdownThemeData of(BuildContext context) {
-    final _InheritedTheme? inheritedTheme =
-    context.dependOnInheritedWidgetOfExactType<_InheritedTheme>();
-    final DropdownThemeData data = inheritedTheme?.theme.data ?? _defaultTheme;
+    final DropdownTheme? inheritedTheme =
+    context.dependOnInheritedWidgetOfExactType<DropdownTheme>();
+    final DropdownThemeData data = inheritedTheme?.data ?? (Theme.of(context).brightness == Brightness.light ? DropdownThemeData.light() : DropdownThemeData.dark());
     return data;
   }
 
   @override
-  Widget build(BuildContext context) {
-    return _InheritedTheme(theme: this, child: child);
+  bool updateShouldNotify(DropdownTheme oldWidget) => data != oldWidget.data;
+
+  @override
+  Widget wrap(BuildContext context, Widget child) {
+    return DropdownTheme(data: data, child: child);
   }
 }
 
-class _InheritedTheme extends InheritedWidget {
-  const _InheritedTheme({
-    Key? key,
-    required this.theme,
-    required Widget child,
-  }) : super(key: key, child: child);
-
-  final DropdownTheme theme;
-
-  @override
-  bool updateShouldNotify(_InheritedTheme old) => theme.data != old.theme.data;
-}

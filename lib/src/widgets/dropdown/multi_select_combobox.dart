@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:pluto_grid/src/widgets/color_utils.dart';
 import 'package:pluto_grid/src/widgets/dropdown/combobox.dart';
-import 'package:pluto_grid/src/widgets/dropdown/dropdown_theme.dart';
 import 'package:pluto_grid/src/widgets/macos_colors.dart';
 import 'dropdown.dart';
 
@@ -113,7 +112,8 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
 
   @override
   Widget build(BuildContext context) {
-    Color fillColor = Theme.of(context).brightness == Brightness.dark
+    ThemeData themeData = Theme.of(context);
+    Color fillColor = themeData.brightness == Brightness.dark
         ? widget.enabled == true ? MacosColors.textFieldBackground.darkColor :  const Color.fromRGBO(255, 255, 255, 0.01)
         : widget.enabled == true ? MacosColors.textFieldBackground.color :  const Color(0xfff6f6f9);
     Widget child = TextField(
@@ -191,33 +191,29 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
         offset = const Offset(0, 0);
       }
 
-      return DropdownTheme(
-          data: Theme.of(context).brightness == Brightness.dark
-              ? DropdownThemeData.dark()
-              : DropdownThemeData.light(),
-          child: MoonDropdown(
-            maxHeight: 200,
-            minHeight: 80,
-            maxWidth: maxWidth,
-            minWidth: minWidth,
-            show: _showDropdown,
-            borderColor: Theme.of(context).brightness == Brightness.dark
-                ? const Color(0xFF3F3F3F)
-                : const Color(0xFFE5E5E5),
-            constrainWidthToChild: false,
-            onTapOutside: () => _handleDropdownTapOutside(),
-            contentPadding: EdgeInsets.zero,
-            dropdownAnchorPosition: MoonDropdownAnchorPosition.vertical,
-            offset: offset,
-            content: widget.optionsViewBuilder != null
-                ? widget.optionsViewBuilder!(
-                context, _handleSelect, _filteredOptionsList)
-                : _buildOptionsView(),
-            child: widget.fieldViewBuilder != null
-                ? widget.fieldViewBuilder!(
-                context, _textController, _focusNode, () {})
-                : child,
-          ));
+      return MoonDropdown(
+        maxHeight: 200,
+        minHeight: 80,
+        maxWidth: maxWidth,
+        minWidth: minWidth,
+        show: _showDropdown,
+        borderColor: themeData.brightness == Brightness.dark
+            ? const Color(0xFF3F3F3F)
+            : const Color(0xFFE5E5E5),
+        constrainWidthToChild: false,
+        onTapOutside: () => _handleDropdownTapOutside(),
+        contentPadding: EdgeInsets.zero,
+        dropdownAnchorPosition: MoonDropdownAnchorPosition.vertical,
+        offset: offset,
+        content: widget.optionsViewBuilder != null
+            ? widget.optionsViewBuilder!(
+            context, _handleSelect, _filteredOptionsList)
+            : _buildOptionsView(themeData),
+        child: widget.fieldViewBuilder != null
+            ? widget.fieldViewBuilder!(
+            context, _textController, _focusNode, () {})
+            : child,
+      );
     });
   }
 
@@ -250,7 +246,7 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
     super.didUpdateWidget(oldWidget);
   }
 
-  Widget _buildOptionsView(){
+  Widget _buildOptionsView(ThemeData themeData){
     Widget optionsContent = Scrollbar(
       controller: _scrollController,
       child: ListView.builder(
@@ -263,7 +259,7 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
         itemExtent: 22,
         itemBuilder: (BuildContext context, int index) {
           bool isSelected = _selectedOptions.containsKey(_filteredOptionsList.elementAt(index));
-          return _buildMenuItem(context, index, isSelected);
+          return _buildMenuItem(context, index, isSelected,themeData);
         },
       ),
     );
@@ -313,7 +309,7 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
     );
 
   }
-  Widget _buildMenuItem(BuildContext context, int index,bool isSelected){
+  Widget _buildMenuItem(BuildContext context, int index,bool isSelected,ThemeData themeData){
     late Widget item = Row(children: [
       Align(
         alignment: Alignment.centerLeft,
@@ -329,12 +325,12 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
         ),
         fillColor: WidgetStateProperty.resolveWith((states) {
           if (states.contains(WidgetState.selected)) {
-            return Theme.of(context).primaryColor;
+            return themeData.primaryColor;
           }
           return null;
         }),
         side: BorderSide(
-            color: Theme.of(context).brightness == Brightness.dark
+            color: themeData.brightness == Brightness.dark
                 ? const Color(0xff5a585c)
                 : const Color(0xffddddde),
             width: 1),
@@ -350,7 +346,7 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
           backgroundColor:
           WidgetStateProperty.resolveWith((states) {
             if (states.contains(WidgetState.hovered)) {
-              return Theme.of(context).primaryColor;
+              return themeData.primaryColor;
             } else {
               return Colors.transparent;
             }
@@ -365,9 +361,9 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
                   (Set<WidgetState> states) {
                 if (states.contains(WidgetState.hovered)) {
                   return ColorUtils.textLuminance(
-                      Theme.of(context).primaryColor);
+                      themeData.primaryColor);
                 } else {
-                  return Theme.of(context).brightness == Brightness.dark
+                  return themeData.brightness == Brightness.dark
                       ? MacosColors.labelColor.darkColor
                       : MacosColors.labelColor.color;
                 }
