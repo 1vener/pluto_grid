@@ -75,7 +75,6 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
           stateManager.rowMenuController.open(position: details.localPosition);
         },
         child: MenuAnchor(
-          consumeOutsideTap: true,
           anchorTapClosesMenu: true,
           controller: stateManager.rowMenuController,
           menuChildren: stateManager.rowRightMenuDelegate?.buildMenuItems(stateManager: stateManager, context: context) ?? [],

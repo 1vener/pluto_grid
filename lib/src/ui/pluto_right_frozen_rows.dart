@@ -61,7 +61,6 @@ class PlutoRightFrozenRowsState
             menuController.open(position: details.localPosition),
         child: MenuAnchor(
           controller: menuController,
-          consumeOutsideTap: true,
           anchorTapClosesMenu: true,
           menuChildren: stateManager.rowRightMenuDelegate?.buildMenuItems(stateManager: stateManager, context: context) ?? [],
           child: ListView.builder(
