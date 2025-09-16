@@ -351,7 +351,7 @@ class _CellState extends PlutoStateWithChange<_Cell> {
   Widget build(BuildContext context) {
     if (_showTypedCell && widget.column.enableEditingMode == true) {
       if(widget.column.hasEditRenderer){
-        return widget.column.renderer!(PlutoColumnRendererContext(
+        return widget.column.editRender!(PlutoColumnRendererContext(
           column: widget.column,
           rowIdx: widget.rowIdx,
           row: widget.row,

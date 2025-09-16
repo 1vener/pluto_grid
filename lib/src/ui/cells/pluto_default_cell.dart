@@ -192,7 +192,8 @@ class _PlutoDefaultCellState extends PlutoStateWithChange<PlutoDefaultCell> {
       );
     }
 
-    return Row(children: [
+    return Row(
+        children: [
       if (_canRowDrag)
         _RowDragIconWidget(
           column: widget.column,
