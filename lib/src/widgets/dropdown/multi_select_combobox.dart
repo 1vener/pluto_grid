@@ -113,6 +113,7 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
   @override
   Widget build(BuildContext context) {
     ThemeData themeData = Theme.of(context);
+    Brightness brightness = themeData.brightness;
     Color fillColor = themeData.brightness == Brightness.dark
         ? widget.enabled == true ? MacosColors.textFieldBackground.darkColor :  const Color.fromRGBO(255, 255, 255, 0.01)
         : widget.enabled == true ? MacosColors.textFieldBackground.color :  const Color(0xfff6f6f9);
@@ -147,15 +148,36 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
             ),
           ),
         ),
-        // isCollapsed: false,
-        // filled: true,
-        // hoverColor: Colors.transparent,
-        border: const OutlineInputBorder(
-          borderSide: BorderSide.none,
-        ),
-        contentPadding: EdgeInsets.zero,
+        isCollapsed: false,
         filled: true,
         fillColor: fillColor,
+        hoverColor: Colors.transparent,
+        contentPadding:
+        const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+        disabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5.0),
+          borderSide: BorderSide(
+              color: brightness == Brightness.dark
+                  ? MacosColors.disabledControlTextColor.darkColor
+                  : MacosColors.disabledControlTextColor.color,
+              width: 1),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(5.0),
+          borderSide: BorderSide(
+              color: brightness == Brightness.dark
+                  ? MacosColors.selectedControlTextColor.darkColor
+                  : MacosColors.selectedControlTextColor.color,
+              width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+            borderRadius:
+            const BorderRadius.all(Radius.circular(5.0)),
+            borderSide: BorderSide(
+                color: themeData
+                    .primaryColor
+                    .withOpacity(0.2),
+                width: 3)),
       ),
       readOnly: true,
     );

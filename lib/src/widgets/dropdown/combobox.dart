@@ -129,8 +129,8 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
 
   @override
   Widget build(BuildContext context) {
-    Brightness brightness = Theme.of(context).brightness;
     ThemeData themeData = Theme.of(context);
+    Brightness brightness = themeData.brightness;
     // maxWidth: constraint.maxWidth -
     //     textFieldIconWidth -
     //     textFieldIconPaddingWidth -4,
@@ -188,7 +188,7 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
         fillColor: fillColor,
         hoverColor: Colors.transparent,
         contentPadding:
-        EdgeInsets.symmetric(vertical: 0, horizontal: 8),
+        const EdgeInsets.symmetric(vertical: 0, horizontal: 8),
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(5.0),
           borderSide: BorderSide(
