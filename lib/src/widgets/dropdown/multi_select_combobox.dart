@@ -64,7 +64,7 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
   bool _showDropdown = false;
 
 
-  final Map<T, bool> _selectedOptions = {};
+  final Map<String, bool> _selectedOptions = {};
 
   Future<void> _performSearch() async {
     if (_options.isEmpty) {
@@ -81,8 +81,10 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
 
   void _handleSelect(T option,bool selected) {
     setState(() {
-      selected ? _selectedOptions[option] = true : _selectedOptions.remove(option);
+      selected ? _selectedOptions[option.toString()] = true : _selectedOptions.remove(option.toString());
       _textController.text = _selectedOptions.keys.map((e)=>e.toString()).join(',');
+      widget.onSelected?.call(option);
+      widget.onChanged(_textController.text);
     });
   }
 
@@ -250,7 +252,12 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
     _searchController = TextEditingController();
     _scrollController = ScrollController();
     widget.init?.call(_textController,_focusNode);
-
+    if(_textController.text.isNotEmpty){
+      List<String> list = _textController.text.split(',');
+      for (var value in list) {
+        _selectedOptions[value] = true;
+      }
+    }
   }
 
   @override
