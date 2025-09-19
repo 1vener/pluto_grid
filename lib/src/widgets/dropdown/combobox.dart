@@ -30,6 +30,7 @@ class ComboBox<T extends Object> extends StatefulWidget {
     this.enabled = true,
     this.init,
     this.titleInLine = true,
+    this.readonly = false,
   });
 
   /// input only selected options;
@@ -46,6 +47,7 @@ class ComboBox<T extends Object> extends StatefulWidget {
   final bool enabled;
   final ComboBoxInit? init;
   final bool titleInLine;
+  final bool readonly;
 
 
   @override
@@ -149,17 +151,12 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
       focusNode: _focusNode,
       canRequestFocus: true,
       enabled: widget.enabled,
+      readOnly: widget.readonly,
       // hintText: "Choose an option",
       onTap: () => _performSearch(),
       onTapOutside: (PointerDownEvent _) =>
           _handleInputTapOutside(),
       onChanged: (String _) => _performSearch(),
-      onEditingComplete: () {
-        print('onEditingComplete:${_searchController.value}');
-      },
-      onSubmitted: (value) {
-        print('onSubmitted:$value');
-      },
       decoration: InputDecoration(
         icon: widget.textFieldIcon != null && widget.titleInLine
             ? SizedBox(
@@ -314,8 +311,11 @@ class _ComboBoxState<T extends Object> extends State<ComboBox<T>> {
                   ),
                 ),
                 onPressed: () {
-                  _handleSelect(
-                      _filteredOptionsList.elementAt(index));
+                  if(!widget.readonly){
+                    _handleSelect(
+                        _filteredOptionsList.elementAt(index));
+                  }
+
                 },
               );
             },

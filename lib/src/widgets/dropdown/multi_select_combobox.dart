@@ -33,6 +33,7 @@ class MultiSelectComboBox<T extends Object> extends StatefulWidget {
     this.enabled = true,
     this.init,
     this.titleInLine = true,
+    this.readonly = false,
   });
 
   final OptionsBuilder<T> optionsBuilder;
@@ -47,6 +48,7 @@ class MultiSelectComboBox<T extends Object> extends StatefulWidget {
   final bool enabled;
   final ComboBoxInit? init;
   final bool titleInLine;
+  final bool readonly;
 
 
   @override
@@ -365,8 +367,10 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
             width: 1),
         value: isSelected,
         onChanged: (bool? _) {
-          _handleSelect(
-              _filteredOptionsList.elementAt(index),!isSelected);
+          if(!widget.readonly){
+            _handleSelect(
+                _filteredOptionsList.elementAt(index),!isSelected);
+          }
         },
       )
     ]);
@@ -402,8 +406,10 @@ class _MultiSelectComboBoxState<T extends Object> extends State<MultiSelectCombo
                   borderRadius: BorderRadius.circular(5)))),
       child: item,
       onPressed: () {
-        _handleSelect(
-            _filteredOptionsList.elementAt(index),!isSelected);
+        if(!widget.readonly){
+          _handleSelect(
+              _filteredOptionsList.elementAt(index),!isSelected);
+        }
       },
     );
   }
