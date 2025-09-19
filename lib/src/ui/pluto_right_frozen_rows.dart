@@ -57,8 +57,12 @@ class PlutoRightFrozenRowsState
 
     return GestureDetector(
         behavior: HitTestBehavior.translucent,
-        onSecondaryTapDown: (details) =>
-            menuController.open(position: details.localPosition),
+        onSecondaryTapDown: (details){
+          if(stateManager.isEditing){
+            return;
+          }
+          menuController.open(position: details.localPosition);
+        },
         child: MenuAnchor(
           controller: menuController,
           anchorTapClosesMenu: true,

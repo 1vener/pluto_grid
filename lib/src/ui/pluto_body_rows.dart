@@ -72,6 +72,9 @@ class PlutoBodyRowsState extends PlutoStateWithChange<PlutoBodyRows> {
     return GestureDetector(
         behavior: HitTestBehavior.translucent,
         onSecondaryTapDown: (details) {
+          if(stateManager.isEditing){
+            return;
+          }
           stateManager.rowMenuController.open(position: details.localPosition);
         },
         child: MenuAnchor(
